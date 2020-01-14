@@ -37,6 +37,12 @@ public class Envoi_Reception {
 			
 			return ligne;
 		}
+		
+		
+		
+		
+		
+		
 		public void envoieFichier(Socket sock, File myFile) {
 			
 			EncodeDecode enc = new EncodeDecode();
@@ -127,6 +133,21 @@ public class Envoi_Reception {
 		}
 		
 		
+		
+		
+		public String ReceiveMessage(Socket sockService) {
+			try{
+				BufferedReader reader = new BufferedReader (new InputStreamReader(sockService.getInputStream()));
+				// Lit une ligne de caractères depuix le flux, et donc la reçoit du client
+				String messageRcv = reader.readLine();
+				System.out.println("Client-PI : new message > " + messageRcv);
+				return messageRcv;
+			}
+			catch(IOException ioe) {
+				System.out.println("Client-PI : Erreur de lecture : " + ioe.getMessage());
+			}
+			return null;
+		}
 		
 	}
 

@@ -13,18 +13,27 @@ public class Serveur {
 		//Création du socket Serveur
 		ServerSocket SocketServeur = new ServerSocket(1234);
 		
-		//String pathname = new String("C:\\Users\\Xavier\\Pictures\\logos\\mayonnaiz.mp3");
-		//File myFile = new File(pathname);
+		
+		
+		String pathname = "D:\\Bureau\\Fichiers";
 		Socket sock;
 		String commande;
+		Socket versSockCli = null;
+		sock = SocketServeur.accept();
+		//String valid = "OK";
+		
+		
 		
 		
 		
 		while(true)
 		{
-				sock = SocketServeur.accept();
 				
-				String ligne = envrec.receptionString(sock);
+				String ligne = envrec.ReceiveMessage(sock);
+				
+				//envrec.envoieString("OK", sock);
+				
+				
 				
 				//On appelle la fonction de séparation pour avoir que la commande
 				commande = fonct.LectureRecep(ligne);
@@ -35,13 +44,27 @@ public class Serveur {
 				//Cas de téléchargement
 				case "DOWNLOAD" :
 					System.out.println("j'ai choisi le téléchargement");
-					break;
 				
 				//Cas de listage des fichiers
-				case "LIST" :
+				case "LIST":
+					
 					System.out.println("J'ai choisi la liste");
-					break;
-				
+					
+					String[] liste = fonct.ListFiles(pathname);
+					
+					envrec.envoieString("LIST " + liste.length, versSockCli);
+					//valid = envrec.receptionString(sock);
+					
+					
+					
+					
+					for (int i=0; i<liste.length; i++) {
+						envrec.envoieString(liste[i], versSockCli);
+						//valid = envrec.receptionString(sock);
+						System.out.println(liste[i]);
+					}
+					
+				System.out.println("Je suis sorti du for");
 				//Cas ou aucune commande n'est reconnue
 				default :
 					System.out.println("La commande n'est pas reconnue");
@@ -49,6 +72,7 @@ public class Serveur {
 				
 				
 				//env.envoieFichier(sock, myFile);
+				//valid = "azer";
 				sock.close();
 				SocketServeur.close();
 				

@@ -1,9 +1,23 @@
+import java.io.*;
 
 public class FonctionsServ {
 
-	public void ListFiles() {
+	public String[] ListFiles(String dir) {
+		File dossier = new File(dir);
+		File[] fichiers = dossier.listFiles();
+		String[] nomsFichiers = new String[fichiers.length];
 		
+		System.out.println("Voici les fichiers disponibles au téléchargemet : ");
+		for (int i=0; i<fichiers.length; i++) {
+			nomsFichiers[i] = fichiers[i].getName();
+			
+		}
+		return nomsFichiers;
 	}
+	
+	
+	
+	
 	
 	public String LectureRecep(String recep) {
 		//Variables

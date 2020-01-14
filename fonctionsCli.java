@@ -24,5 +24,11 @@ public class fonctionsCli {
 		return saisie;
 		
 	}
+	
+	
+
+	
+	
+	
 
 }
