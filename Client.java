@@ -16,49 +16,68 @@ public class Client {
 				Socket sock = new Socket("127.0.0.1", 1234);
 			
 				
-				
-				
-				//Saisie de l'action à envoyer au serveur
-				String saisie = fonct.saisieClavier();
-				
-				//Appel de la  fonction d'envoie de chaines
-				envrec.envoieString(saisie, sock);
-				
-				//valid = envrec.receptionString(sock);
-				
-				
-			
-				
-				//recep.receptionFichier(sock);
-				System.out.println("Fichier reçu");
-			
-				String recep = envrec.ReceiveMessage(sock);
-				//envrec.envoieString("OK", sock);
-				
-				String[] ligne = recep.split(" ");
-				
-				String com = ligne[0];
-				
-				
-				
-				switch(com) {
-				case "FILE" :
+				int i = 1;
+				while(i == 1) {
 					
-				case "LIST" :
+					//Saisie de l'action à envoyer au serveur
+					String saisie = fonct.saisieClavier();
 					
-					int tailleList = Integer.parseInt(ligne[1]);
-					String[] listFichiers = new String[tailleList];
+					//Appel de la  fonction d'envoie de chaines
+					envrec.envoieString(saisie, sock);
 					
-					System.out.println("La liste des fichiers disponibles est : ");
-					for (int i = 0; i<tailleList; i++) {
-						listFichiers[i] = envrec.ReceiveMessage(sock);
-						//envrec.envoieString("OK", sock);
-						System.out.println(listFichiers[i]);
+					//valid = envrec.receptionString(sock);
+					
+					
+				
+					
+					//recep.receptionFichier(sock);
+				
+					String recep = envrec.receptionString(sock);
+					//envrec.envoieString("OK", sock);
+					
+					String[] ligne = recep.split(" ");
+					
+					String com = ligne[0];
+					System.out.println("La commande est : " + com);
+					
+					
+					
+					switch(com) {
+					case "FILE" :
+						
+					case "LIST" :
+						
+						
+						String listFichiers = envrec.receptionString(sock);
+						
+						System.out.println("La liste des fichiers disponibles est : ");
+						
+						System.out.println("je suis la liste : " + listFichiers);
+						
+						break;
+						
+						
+						
+					case "CLOSE" :
+						
+						System.out.println("fermeture de la connexion");
+						sock.close();
+						i = 30000;
+						
+						break;
+						
+					default :
+						System.out.println("bonjour, je ne sers à rien");
+						break;
 					}
+					
+					
+					
+					
+					
 				}
 				
-				//valid = "AEZR";
-				sock.close();
+			sock.close();
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

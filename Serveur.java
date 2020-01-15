@@ -17,74 +17,71 @@ public class Serveur {
 		
 		String pathname = "D:\\Bureau\\Fichiers";
 		Socket sock;
-		String commande;
-		Socket versSockCli = null;
+		String commande = new String();
 		sock = SocketServeur.accept();
 		//String valid = "OK";
 		
 		
 		
 		
-		
-		while(true)
+		int i = 1;
+		while(i == 1)
 		{
 				
-				String ligne = envrec.ReceiveMessage(sock);
-				
-				//envrec.envoieString("OK", sock);
-				
-				
-				
+				String ligne = envrec.receptionString(sock);
 				//On appelle la fonction de séparation pour avoir que la commande
 				commande = fonct.LectureRecep(ligne);
-				
+			
+				System.out.println(commande);
 				//On fait un switch sur commande pour différencier  les traitements
+				
+				
+				
+				
+				
+				
 				switch (commande) {
+				
+				
 				
 				//Cas de téléchargement
 				case "DOWNLOAD" :
 					System.out.println("j'ai choisi le téléchargement");
+					break;
 				
+
+					
 				//Cas de listage des fichiers
 				case "LIST":
 					
 					System.out.println("J'ai choisi la liste");
 					
-					String[] liste = fonct.ListFiles(pathname);
+					String liste = fonct.ListFiles(pathname);
 					
-					envrec.envoieString("LIST " + liste.length, versSockCli);
-					//valid = envrec.receptionString(sock);
+					envrec.envoieString("LIST", sock);
+					
+					System.out.println(liste);
+					envrec.envoieString(liste, sock);
+					
+					break;
+
 					
 					
 					
-					
-					for (int i=0; i<liste.length; i++) {
-						envrec.envoieString(liste[i], versSockCli);
-						//valid = envrec.receptionString(sock);
-						System.out.println(liste[i]);
-					}
-					
-				System.out.println("Je suis sorti du for");
 				//Cas ou aucune commande n'est reconnue
 				default :
 					System.out.println("La commande n'est pas reconnue");
+					envrec.envoieString("CLOSE", sock);
+					i = 3000000;
+					break;
 				}
 				
 				
-				//env.envoieFichier(sock, myFile);
-				//valid = "azer";
-				sock.close();
-				SocketServeur.close();
 				
 				
-				
-				
-				
-			
-		
 		}
-		
-		
+		sock.close();
+		SocketServeur.close();
 	}
 
 }

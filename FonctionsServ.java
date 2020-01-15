@@ -2,14 +2,15 @@ import java.io.*;
 
 public class FonctionsServ {
 
-	public String[] ListFiles(String dir) {
+	public String ListFiles(String dir) {
 		File dossier = new File(dir);
 		File[] fichiers = dossier.listFiles();
-		String[] nomsFichiers = new String[fichiers.length];
+		String nomsFichiers = new String();
 		
 		System.out.println("Voici les fichiers disponibles au téléchargemet : ");
 		for (int i=0; i<fichiers.length; i++) {
-			nomsFichiers[i] = fichiers[i].getName();
+			nomsFichiers += fichiers[i].getName();
+			nomsFichiers += " ";
 			
 		}
 		return nomsFichiers;
@@ -21,7 +22,7 @@ public class FonctionsServ {
 	
 	public String LectureRecep(String recep) {
 		//Variables
-		String com = null;
+		String com = new String();
 		
 		//Séparation de la commande
 		String[] ligne = recep.split(" ");

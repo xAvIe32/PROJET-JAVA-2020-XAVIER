@@ -5,7 +5,7 @@ public class Envoi_Reception {
 		
 	
 		public void envoieString(String toSend, Socket sock) {
-			OutputStream os = null;
+			OutputStream os;
 			
 			try {
 			
@@ -20,14 +20,15 @@ public class Envoi_Reception {
 		}
 
 		public String receptionString(Socket sock) {
-			//On la met dans la variable ligne
-			String ligne = null;
 			
+			String ligne = new String();
 			try {
-				//Reception de la chaine contenant la commande
-				InputStream is = sock.getInputStream();
 				
-				ligne = new String(is.readAllBytes());
+				
+				
+				BufferedReader reader = new BufferedReader (new InputStreamReader(sock.getInputStream()));
+				ligne = reader.readLine();
+
 				
 				
 			} catch (IOException e) {
@@ -37,10 +38,6 @@ public class Envoi_Reception {
 			
 			return ligne;
 		}
-		
-		
-		
-		
 		
 		
 		public void envoieFichier(Socket sock, File myFile) {
@@ -135,19 +132,7 @@ public class Envoi_Reception {
 		
 		
 		
-		public String ReceiveMessage(Socket sockService) {
-			try{
-				BufferedReader reader = new BufferedReader (new InputStreamReader(sockService.getInputStream()));
-				// Lit une ligne de caractères depuix le flux, et donc la reçoit du client
-				String messageRcv = reader.readLine();
-				System.out.println("Client-PI : new message > " + messageRcv);
-				return messageRcv;
-			}
-			catch(IOException ioe) {
-				System.out.println("Client-PI : Erreur de lecture : " + ioe.getMessage());
-			}
-			return null;
-		}
+		
 		
 	}
 
