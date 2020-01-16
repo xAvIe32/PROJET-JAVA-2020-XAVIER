@@ -15,7 +15,7 @@ public class Serveur {
 		
 		
 		
-		String pathname = "C:\\Users\\Xavier\\Desktop\\FICHIERS";
+		String pathname = "D:\\Bureau\\Fichiers";
 		Socket sock;
 		String commande = new String();
 		sock = SocketServeur.accept();
@@ -48,6 +48,9 @@ public class Serveur {
 				
 				//Cas de téléchargement
 				case "DOWNLOAD" :
+					
+					String toSend = new String ();
+					
 					System.out.println("j'ai choisi le téléchargement");
 					
 					String filename = result[1];
@@ -58,10 +61,22 @@ public class Serveur {
 					
 					
 					File fichier = new File(pathname + "\\" + filename);
-					envrec.envoieFichier(sock, fichier, filename);
 					
+					envrec.envoieString("FILE£"+filename, sock);
 					
-					
+					if (fichier.exists() == true) {
+						
+						BufferedReader reader = envrec.FileToString(sock, fichier, filename);
+						
+						while ((toSend = reader.readLine()) != null) {
+							
+							//Création du flux de données
+							envrec.envoieString(toSend, sock);
+						}
+					}
+					else {
+						System.out.println("Le fichier n'existe pas");
+					}
 					
 					
 					break;

@@ -40,34 +40,28 @@ public class Envoi_Reception {
 		}
 		
 		
-		public void envoieFichier(Socket sock, File myFile, String filename) {
+		public BufferedReader FileToString (Socket sock, File myFile, String filename) {
 			
 			EncodeDecode enc = new EncodeDecode();
 			
-			//Variables
-			String ligne;
 			//POUR LES IMAGES
 	        String encodstring = null;
+	        BufferedReader reader = null;
 			try {
 				
 				encodstring = enc.encodeFileToBase64Binary(myFile);
 				System.out.println(encodstring);
 				
 				Reader InputString = new StringReader("FILE£" + filename + "£" + encodstring);
-				BufferedReader reader = new BufferedReader(InputString);
+				 reader = new BufferedReader(InputString);
 				System.out.println(reader);
-				while ((ligne = reader.readLine()) != null) {
-					
-					//Création du flux de données
-					OutputStream os = sock.getOutputStream();			
-					PrintStream pStream = new PrintStream(os);
-					pStream.println(ligne);
-				}
 				
-				reader.close();
+				
+				
 			} catch (FileNotFoundException e1) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				System.out.println("LE FICHIER N'EXISTE PAS LA COOIN DE TA RACE");
+				this.envoieString("CLOSE", sock);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -76,49 +70,49 @@ public class Envoi_Reception {
 				e.printStackTrace();
 			}
 			
-				
+			return reader;	
 		}
 		
 		
 		
 		
-		public void receptionFichier(Socket sock) {
+		public void StringToFile(Socket sock, String filename, String string) {
 			try {
 				
 					EncodeDecode dec = new EncodeDecode();
 					
-					//Récupération du flux de donnés
-					InputStream is = sock.getInputStream();
 					
-					//Création du fichier qui accueilliras les données
-					OutputStream fos = new FileOutputStream("C:\\Users\\Xavier\\Desktop\\Essai.txt");
 					
-					//Ecriture des données dans le fichier
-					int c;
-					while ((c = is.read()) != -1) {
-						fos.write(c);
-						
-					}
 					
-					BufferedReader lecteurAvecBuffer = null;
+					Reader inputString = new StringReader(string);	
+					BufferedReader reader = new BufferedReader(inputString);
+					
+					
 					StringBuilder stringBuild = new StringBuilder();
-					String line = null;
+					String line = new String();
 					
-					lecteurAvecBuffer = new BufferedReader(new FileReader("C:\\Users\\Xavier\\Desktop\\Essai.txt"));
-					while ((line = lecteurAvecBuffer.readLine()) != null) {
+					
+					while ((line = reader.readLine()) != null) {
 						stringBuild.append(line);
 					}
+					
+					
+					
+					
 					//String imageString = lecteurAvecBuffer.toString();
-					String imageString = stringBuild.toString();
-					dec.decodeBase64BinaryToFile(imageString);
+					String fileString = stringBuild.toString();
+					
+					
+					byte[] fileByte = dec.decodeBase64BinaryToFile(fileString);
 				    
-				    
+					OutputStream outputfile = new FileOutputStream("D:\\Bureau\\Réception\\" + filename);
+					//Ecriture du fichier
+					outputfile.write(fileByte);
 				    
 				    
 					
-					lecteurAvecBuffer.close();
 					//Fermeture du fichier
-					fos.close();			
+					outputfile.close();			
 
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block

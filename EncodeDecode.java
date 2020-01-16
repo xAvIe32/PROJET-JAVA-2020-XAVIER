@@ -34,29 +34,15 @@ public class EncodeDecode {
 	
 	
 	//FONCTION DE DECODAGE D'UNE CHAINE EN UN FICHIER
-	public void decodeBase64BinaryToFile(String string) {
+	public byte[] decodeBase64BinaryToFile(String string) {
 		System.out.println(string);
-		String imagestr = string;
-		byte[] imageByte;
+		
 		
 		//Decodage de la chaine
-		imageByte = Base64.getDecoder().decode(imagestr);
+		 byte[] imageByte = Base64.getDecoder().decode(string);
 		
+		 return imageByte;
 		
-		try {
-			
-			//Definition de l'emplacement du fichier
-			OutputStream outputfile = new FileOutputStream("C:\\Users\\Xavier\\Desktop\\Essai.mp3");
-			//Ecriture du fichier
-			outputfile.write(imageByte);
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
 	}
 
 }

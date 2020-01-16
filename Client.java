@@ -8,10 +8,9 @@ public class Client {
 		
 		Envoi_Reception envrec = new Envoi_Reception();
 		fonctionsCli fonct = new fonctionsCli();
-		//String valid = "OK";
 		
 		
-		//while (valid == "OK") {
+		
 			try {
 				Socket sock = new Socket("127.0.0.1", 1234);
 			
@@ -45,7 +44,31 @@ public class Client {
 					switch(com) {
 					case "FILE" :
 						
+						String filename = ligne[1];
+						
+						
+						String recepFile = envrec.receptionString(sock);
+						
+						String[] tabloRecep = recepFile.split("£");
+						
+						if (tabloRecep.length == 3) {
+							String Guilhem = tabloRecep[2];
+							
+							
+							System.out.println("recepfile === " + Guilhem);
+							
+							envrec.StringToFile(sock, filename, Guilhem);
+						}
+						
+						else {
+							System.out.println("Le fichier n'existe pas, fermeture de la connexion");
+							
+						}
+						
+						break;
+						
 					case "LIST" :
+						
 						
 						
 						String listFichiers = ligne[1];
