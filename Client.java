@@ -35,7 +35,7 @@ public class Client {
 					String recep = envrec.receptionString(sock);
 					//envrec.envoieString("OK", sock);
 					
-					String[] ligne = recep.split(" ");
+					String[] ligne = recep.split("£");
 					
 					String com = ligne[0];
 					System.out.println("La commande est : " + com);
@@ -48,7 +48,7 @@ public class Client {
 					case "LIST" :
 						
 						
-						String listFichiers = envrec.receptionString(sock);
+						String listFichiers = ligne[1];
 						
 						System.out.println("La liste des fichiers disponibles est : ");
 						

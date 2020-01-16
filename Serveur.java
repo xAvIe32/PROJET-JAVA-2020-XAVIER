@@ -15,7 +15,7 @@ public class Serveur {
 		
 		
 		
-		String pathname = "D:\\Bureau\\Fichiers";
+		String pathname = "C:\\Users\\Xavier\\Desktop\\FICHIERS";
 		Socket sock;
 		String commande = new String();
 		sock = SocketServeur.accept();
@@ -57,8 +57,6 @@ public class Serveur {
 					System.out.println("J'ai choisi la liste");
 					
 					String liste = fonct.ListFiles(pathname);
-					
-					envrec.envoieString("LIST", sock);
 					
 					System.out.println(liste);
 					envrec.envoieString(liste, sock);
