@@ -29,8 +29,10 @@ public class Serveur {
 		{
 				
 				String ligne = envrec.receptionString(sock);
+				String[] result = ligne.split(" ");
+				commande = result[0];
 				//On appelle la fonction de séparation pour avoir que la commande
-				commande = fonct.LectureRecep(ligne);
+				//commande = fonct.LectureRecep(ligne);
 			
 				System.out.println(commande);
 				//On fait un switch sur commande pour différencier  les traitements
@@ -47,6 +49,21 @@ public class Serveur {
 				//Cas de téléchargement
 				case "DOWNLOAD" :
 					System.out.println("j'ai choisi le téléchargement");
+					
+					String filename = result[1];
+					
+					System.out.println(filename);
+					
+					
+					
+					
+					File fichier = new File(pathname + "\\" + filename);
+					envrec.envoieFichier(sock, fichier, filename);
+					
+					
+					
+					
+					
 					break;
 				
 

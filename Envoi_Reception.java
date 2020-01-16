@@ -40,7 +40,7 @@ public class Envoi_Reception {
 		}
 		
 		
-		public void envoieFichier(Socket sock, File myFile) {
+		public void envoieFichier(Socket sock, File myFile, String filename) {
 			
 			EncodeDecode enc = new EncodeDecode();
 			
@@ -53,7 +53,7 @@ public class Envoi_Reception {
 				encodstring = enc.encodeFileToBase64Binary(myFile);
 				System.out.println(encodstring);
 				
-				Reader InputString = new StringReader(encodstring);
+				Reader InputString = new StringReader("FILE£" + filename + "£" + encodstring);
 				BufferedReader reader = new BufferedReader(InputString);
 				System.out.println(reader);
 				while ((ligne = reader.readLine()) != null) {
