@@ -29,10 +29,13 @@ public class Serveur {
 		{
 				
 				String ligne = envrec.receptionString(sock);
+				
+				System.out.println(ligne);
 				String[] result = ligne.split(" ");
+				
 				commande = result[0];
+				
 				//On appelle la fonction de séparation pour avoir que la commande
-				//commande = fonct.LectureRecep(ligne);
 			
 				System.out.println(commande);
 				//On fait un switch sur commande pour différencier  les traitements
@@ -62,10 +65,11 @@ public class Serveur {
 					
 					File fichier = new File(pathname + "\\" + filename);
 					
-					envrec.envoieString("FILE£"+filename, sock);
+					
 					
 					if (fichier.exists() == true) {
 						
+						envrec.envoieString("FILE£"+filename, sock);
 						BufferedReader reader = envrec.FileToString(sock, fichier, filename);
 						
 						while ((toSend = reader.readLine()) != null) {
@@ -76,6 +80,8 @@ public class Serveur {
 					}
 					else {
 						System.out.println("Le fichier n'existe pas");
+						envrec.envoieString("CLOSE£Le fichier n'existe pas", sock);
+						i = 3000000;
 					}
 					
 					
@@ -98,11 +104,18 @@ public class Serveur {
 					
 					
 					
-				//Cas ou aucune commande n'est reconnue
-				default :
-					System.out.println("La commande n'est pas reconnue");
-					envrec.envoieString("CLOSE", sock);
+				//Cas de demande de fermeture par le client
+				case "CLOSE":
+					System.out.println("Fermeture de la connexion");
+					envrec.envoieString("CLOSE£Déconnexion demandée par le Client", sock);
 					i = 3000000;
+					break;
+					 
+					
+				//Cas ou aucune commande n'est reconnue
+				default: 
+					System.out.println("La commande n'est pas reconnue");
+					envrec.envoieString("FALSEACT£Action non reconnue", sock);
 					break;
 				}
 				

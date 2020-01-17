@@ -42,6 +42,7 @@ public class Client {
 					
 					
 					switch(com) {
+					
 					case "FILE" :
 						
 						String filename = ligne[1];
@@ -55,12 +56,28 @@ public class Client {
 							String Guilhem = tabloRecep[2];
 							
 							
-							System.out.println("recepfile === " + Guilhem);
+							//System.out.println("recepfile === " + Guilhem);
 							
 							envrec.StringToFile(sock, filename, Guilhem);
+							
+							File fichierRecu = new File("D:\\Bureau\\Réception\\" + filename);
+							
+							if (fichierRecu.exists()) {
+								System.out.println("");
+								System.out.println("Fichier reçu avec succès !!");
+								System.out.println("");
+							}
+							else {
+								System.out.println("");
+								System.out.println("Erreur dans la réception du fichier...");
+								System.out.println("");
+							}
 						}
+							
+						
 						
 						else {
+							System.out.println("");
 							System.out.println("Le fichier n'existe pas, fermeture de la connexion");
 							
 						}
@@ -73,9 +90,7 @@ public class Client {
 						
 						String listFichiers = ligne[1];
 						
-						System.out.println("La liste des fichiers disponibles est : ");
-						
-						System.out.println("je suis la liste : " + listFichiers);
+						fonct.AfficherListe(listFichiers);
 						
 						break;
 						
@@ -84,9 +99,17 @@ public class Client {
 					case "CLOSE" :
 						
 						System.out.println("fermeture de la connexion");
+						String raison = ligne[1];
+						System.out.println(raison);
 						sock.close();
 						i = 30000;
 						
+						break;
+						
+					case "FALSEACT":
+						System.out.println("");
+						System.out.println("La commande n'est pas reconnue");
+						System.out.println("");
 						break;
 						
 					default :

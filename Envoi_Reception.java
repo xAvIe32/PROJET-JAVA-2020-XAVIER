@@ -11,6 +11,7 @@ public class Envoi_Reception {
 			
 				os = sock.getOutputStream();
 				PrintStream pn = new PrintStream(os);
+				//os.flush();
 				pn.println(toSend);
 			
 			} catch (IOException e) {

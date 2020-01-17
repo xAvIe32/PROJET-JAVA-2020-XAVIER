@@ -23,7 +23,7 @@ public class EncodeDecode {
         
         //Création de la chaine de caractères contenant le fichier en base64
         base64img = new String(Base64.getEncoder().encode(bytes), "UTF-8");
-        System.out.println(base64img);
+        //System.out.println(base64img);
         //Retour de la chaine de caractères
         return base64img;
         
@@ -35,7 +35,7 @@ public class EncodeDecode {
 	
 	//FONCTION DE DECODAGE D'UNE CHAINE EN UN FICHIER
 	public byte[] decodeBase64BinaryToFile(String string) {
-		System.out.println(string);
+		//System.out.println(string);
 		
 		
 		//Decodage de la chaine

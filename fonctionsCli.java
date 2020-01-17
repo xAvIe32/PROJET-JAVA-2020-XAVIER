@@ -26,6 +26,17 @@ public class fonctionsCli {
 	}
 	
 	
+	
+	public void AfficherListe(String list) {
+		String[] laListe = list.split(" ");
+		
+		System.out.println("");
+		System.out.println("Voici la liste des fichiers disponibles : ");
+		for (int i = 0; i<laListe.length; i++) {
+			System.out.println(laListe[i]);
+		}
+		System.out.println("");
+	}
 
 	
 	
