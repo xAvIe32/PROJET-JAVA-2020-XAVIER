@@ -8,7 +8,7 @@ public class Client {
 		
 		Envoi_Reception envrec = new Envoi_Reception();
 		fonctionsCli fonct = new fonctionsCli();
-		
+		String recepFile = new String();
 		
 		
 			try {
@@ -39,50 +39,80 @@ public class Client {
 					String com = ligne[0];
 					System.out.println("La commande est : " + com);
 					
+					String filename = ligne[1];
 					
 					
 					switch(com) {
 					
 					case "FILE" :
 						
-						String filename = ligne[1];
+					
+						String Guilhem = envrec.receptionString(sock);
 						
-						
-						String recepFile = envrec.receptionString(sock);
-						
-						String[] tabloRecep = recepFile.split("£");
-						
-						if (tabloRecep.length == 3) {
-							String Guilhem = tabloRecep[2];
 							
+						//System.out.println("recepfile === " + Guilhem);
 							
-							//System.out.println("recepfile === " + Guilhem);
+						System.out.println("Reception : " + Guilhem);
 							
-							envrec.StringToFile(sock, filename, Guilhem);
+						envrec.StringToFile(sock, filename, Guilhem);
 							
-							File fichierRecu = new File("D:\\Bureau\\Réception\\" + filename);
+						File fichierRecu = new File("D:\\Bureau\\Réception\\" + filename);
 							
-							if (fichierRecu.exists()) {
-								System.out.println("");
-								System.out.println("Fichier reçu avec succès !!");
-								System.out.println("");
-							}
-							else {
-								System.out.println("");
-								System.out.println("Erreur dans la réception du fichier...");
-								System.out.println("");
-							}
-						}
-							
-						
-						
-						else {
+						if (fichierRecu.exists()) {
 							System.out.println("");
-							System.out.println("Le fichier n'existe pas, fermeture de la connexion");
+							System.out.println("Fichier reçu avec succès !!");
+							System.out.println("");
 							
 						}
+							
+						
+						
 						
 						break;
+						
+						
+						
+						
+						
+						
+						
+					case "FILETHREAD" :
+						
+						int longTablo = Integer.parseInt(envrec.receptionString(sock));
+						System.out.println("long = " + longTablo);
+						
+						//String[] result = new String[longTablo];
+						
+						ObjectInputStream in = new ObjectInputStream(sock.getInputStream());
+						String[] result = null;
+						try {
+							result = (String[]) in.readObject();
+							
+						} catch (ClassNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						
+						System.out.println("longueur = " +result.length);
+						for (int j=0; j < result.length; j++) {
+							System.out.println(result[j]);
+						}
+						
+						
+						
+						
+						System.out.println("AU SECOOOURS");
+						
+						
+						break;
+						
+						
+						
+						
+						
+						
+						
 						
 					case "LIST" :
 						

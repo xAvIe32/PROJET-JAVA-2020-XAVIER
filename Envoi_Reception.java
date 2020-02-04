@@ -3,6 +3,8 @@ import java.net.Socket;
 
 public class Envoi_Reception {
 		
+		Socket sock;
+		
 	
 		public void envoieString(String toSend, Socket sock) {
 			OutputStream os;
@@ -20,6 +22,14 @@ public class Envoi_Reception {
 			}
 		}
 
+		
+		
+		
+		
+		
+		
+		
+		
 		public String receptionString(Socket sock) {
 			
 			String ligne = new String();
@@ -41,6 +51,12 @@ public class Envoi_Reception {
 		}
 		
 		
+		
+		
+		
+		
+		
+		
 		public BufferedReader FileToString (Socket sock, File myFile, String filename) {
 			
 			EncodeDecode enc = new EncodeDecode();
@@ -53,9 +69,9 @@ public class Envoi_Reception {
 				encodstring = enc.encodeFileToBase64Binary(myFile);
 				System.out.println(encodstring);
 				
-				Reader InputString = new StringReader("FILE£" + filename + "£" + encodstring);
+				Reader InputString = new StringReader(encodstring);
 				 reader = new BufferedReader(InputString);
-				System.out.println(reader);
+				System.out.println("FiletoString " + reader);
 				
 				
 				
@@ -73,6 +89,10 @@ public class Envoi_Reception {
 			
 			return reader;	
 		}
+		
+		
+		
+		
 		
 		
 		

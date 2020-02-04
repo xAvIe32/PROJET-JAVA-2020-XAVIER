@@ -7,19 +7,17 @@ public class Serveur {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		Envoi_Reception envrec = new Envoi_Reception();
-		FonctionsServ fonct = new FonctionsServ();
+		
+		
 		
 		//Création du socket Serveur
 		ServerSocket SocketServeur = new ServerSocket(1234);
-		
-		
-		
-		String pathname = "D:\\Bureau\\Fichiers";
 		Socket sock;
 		String commande = new String();
 		sock = SocketServeur.accept();
-		//String valid = "OK";
+		
+		Envoi_Reception envrec = new Envoi_Reception();
+		FonctionsServ fonct = new FonctionsServ(sock, "D:\\Bureau\\Fichiers", envrec);
 		
 		
 		
@@ -44,6 +42,7 @@ public class Serveur {
 				
 				
 				
+				String filename = result[1];
 				
 				switch (commande) {
 				
@@ -52,38 +51,13 @@ public class Serveur {
 				//Cas de téléchargement
 				case "DOWNLOAD" :
 					
-					String toSend = new String ();
+					
 					
 					System.out.println("j'ai choisi le téléchargement");
 					
-					String filename = result[1];
-					
-					System.out.println(filename);
 					
 					
-					
-					
-					File fichier = new File(pathname + "\\" + filename);
-					
-					
-					
-					if (fichier.exists() == true) {
-						
-						envrec.envoieString("FILE£"+filename, sock);
-						BufferedReader reader = envrec.FileToString(sock, fichier, filename);
-						
-						while ((toSend = reader.readLine()) != null) {
-							
-							//Création du flux de données
-							envrec.envoieString(toSend, sock);
-						}
-					}
-					else {
-						System.out.println("Le fichier n'existe pas");
-						envrec.envoieString("CLOSE£Le fichier n'existe pas", sock);
-						i = 3000000;
-					}
-					
+					fonct.EnvoieFichier(filename);
 					
 					break;
 				
@@ -94,13 +68,39 @@ public class Serveur {
 					
 					System.out.println("J'ai choisi la liste");
 					
-					String liste = fonct.ListFiles(pathname);
+					fonct.ListFiles();
 					
-					System.out.println(liste);
-					envrec.envoieString(liste, sock);
 					
 					break;
+					
+					
+					
+					
 
+				case "DOWNTHREAD":
+					
+					
+					String[] fileStringTab = fonct.FileToTablo(filename);
+					System.out.println(String.valueOf(fileStringTab.length));
+					envrec.envoieString(String.valueOf(fileStringTab.length), sock);
+					
+					
+					ObjectOutputStream out = new ObjectOutputStream(sock.getOutputStream());
+					out.writeObject(fileStringTab);  
+					
+//					for (int j=0; j < fileStringTab.length; j++) {
+//						System.out.println(fileStringTab[j]);
+//						
+//						envrec.envoieString(fileStringTab[j], sock);
+//					}
+					
+					break;
+					
+					
+					
+					
+					
+					
 					
 					
 					
