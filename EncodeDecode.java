@@ -6,6 +6,9 @@ import java.util.Base64;
 
 public class EncodeDecode {
 
+	  //------\\
+	 //Méthodes\\
+	//----------\\
 	
 	//FONCTION D'ENCODAGE DES FICHIERS EN BASE64
 	public String encodeFileToBase64Binary(File file) throws Exception{
