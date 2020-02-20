@@ -1,3 +1,4 @@
+package Default;
 import java.io.*;
 import java.net.*;
 
@@ -5,14 +6,13 @@ import java.net.*;
 //communes aux Clients et aux Serveurs
 public abstract class Commun {
 	//Attributs de l'objet de type commun
-	String path;
-	int port;
+	private String path;
+	protected int port;
 	
 	//Constructeur
-	public Commun(String path, int port) {
+	public Commun(String path) {
 		super();
 		this.path = path;
-		this.port = port;
 	}
 	
 	  //------\\
@@ -20,15 +20,13 @@ public abstract class Commun {
 	//----------\\
 	
 	//Listage des fichiers
-	protected String ListFiles() {
+	public String ListFiles(String chemin) {
 		
 		String nomsFichiers = new String();
 		//Création d'un répertoire
-		File dossier = new File(this.path);
+		File dossier = new File(chemin);
 		//Listage des fichiers dans un tableau
 		File[] fichiers = dossier.listFiles();
-		//Préparation de la chaine de caractères à envoyer
-		nomsFichiers = "LIST£"; 
 		
 		//Création de la chaine contenant tous les noms de fichiers séparés par des espaces
 		for (int i=0; i<fichiers.length; i++) {
@@ -49,7 +47,7 @@ public abstract class Commun {
 			//Envoie de la chaine
 			pn.println(toSend);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			//   Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -65,7 +63,7 @@ public abstract class Commun {
 			//Lecture du buffer
 			ligne = reader.readLine();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			//   Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -78,12 +76,12 @@ public abstract class Commun {
 		
 		EncodeDecode enc = new EncodeDecode();
         String encodstring = new String();
-			
+		
 		try {
 			//Encodage en base64 et retour en String
 			encodstring = enc.encodeFileToBase64Binary(myFile);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			//   Auto-generated catch block
 			e.printStackTrace();
 		}
 		return encodstring;	
@@ -106,10 +104,10 @@ public abstract class Commun {
 			outputfile.close();			
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			//   Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			//   Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -127,7 +125,7 @@ public abstract class Commun {
 			//On met dans la variable saisie le contenu écrit
 			saisie = br.readLine();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			//   Auto-generated catch block
 			e.printStackTrace();
 		}
 		return saisie;

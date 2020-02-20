@@ -1,12 +1,31 @@
+package Serveur;
 import java.io.*;
 import java.net.*;
 
 public class mainServeur {
 
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
+		//   Auto-generated method stub
 		//Création d'un serveur
-		SRV Serv = new SRV("D:\\Bureau\\Fichiers\\", 1234);
+		SRV Serv = new SRV("D:\\Bureau\\");
+		Serv.saisiePort();
+		
+		//CREATION DU SOCKET QUI ENVOIE A L'ANNUAIRE
+		Socket conAnn = new Socket("127.0.0.1", 32370);
+		
+		//FONCTION QUI ENVOIE LE NUMERO DU PORT A L'ANNUAIRE
+		String portstring= ""+Serv.getPort();
+		
+		Serv.envoieString(portstring, conAnn);
+		
+		String finPath = Serv.saisieClavier();
+		Serv.envoieString(Serv.ListFiles(Serv.getPath()+ finPath), conAnn);
+		
+		/* AU LIEU D ENVOYER DES STRINGS? ENVOYER DIRECTEMENT UNE HMAP AVEC NOM FICHIER ET BLOCS*/
+		
+		
+		
+		
 		//Création du socket serveur
 		Serv.creaServSock();
 		//Acceptation de la connexion
@@ -14,6 +33,7 @@ public class mainServeur {
 		//Récupération du socket de service
 		Socket sserv = Serv.getService();
 		String commande = new String();
+		
 		
 		
 		
@@ -38,7 +58,7 @@ public class mainServeur {
 					String filename = result[1];
 					System.out.println("j'ai choisi le téléchargement");
 					//Création du fichier
-					File myFile = new File(Serv.getPath() + filename);
+					File myFile = new File(Serv.getPath()+ finPath + filename);
 					
 					//Envoi du fichier s'il existe
 					if (myFile.exists()==true) {
@@ -60,7 +80,7 @@ public class mainServeur {
 					
 					System.out.println("J'ai choisi la liste");
 					//Envoie de la liste
-					Serv.envoieString(Serv.ListFiles(), sserv);
+					Serv.envoieString(Serv.ListFiles(Serv.getPath()+ finPath), sserv);
 					
 					break;					
 					

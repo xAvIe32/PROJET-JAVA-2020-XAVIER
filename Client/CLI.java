@@ -1,16 +1,21 @@
+package Client;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import Default.Commun;
 
 public class CLI extends Commun {
 	//Attributs de la classe CLI
 	String IPAddr;
 	Socket sock;
+	int port;
 
 	//Constructeur
 	public CLI(String path, int port, String iPAddr) {
-		super(path, port);
+		super(path);
 		IPAddr = iPAddr;
+		this.port = port;
 	} 
 	
 	
