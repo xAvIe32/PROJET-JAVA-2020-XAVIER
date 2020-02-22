@@ -7,7 +7,7 @@ public class mainServeur {
 	public static void main(String[] args) throws IOException {
 		//   Auto-generated method stub
 		//Création d'un serveur
-		SRV Serv = new SRV("D:\\Bureau\\");
+		SRV Serv = new SRV("C:\\Users\\Xavier\\Desktop\\");
 		Serv.saisiePort();
 		
 		//CREATION DU SOCKET QUI ENVOIE A L'ANNUAIRE
@@ -16,11 +16,17 @@ public class mainServeur {
 		//FONCTION QUI ENVOIE LE NUMERO DU PORT A L'ANNUAIRE
 		String portstring= ""+Serv.getPort();
 		
-		Serv.envoieString(portstring, conAnn);
+		Serv.sendObject(portstring, conAnn);
 		
 		String finPath = Serv.saisieClavier();
-		Serv.envoieString(Serv.ListFiles(Serv.getPath()+ finPath), conAnn);
+		String list = Serv.ListFiles(Serv.getPath()+ finPath);
+		Serv.sendObject(list, conAnn);
 		
+		String[] files = Serv.nameFiles(list);
+		for (String string : files) {
+			byte[] fileByte = Serv.decoupFichier(new File(Serv.getPath()+finPath+"\\"+string));
+			Serv.sendObject(Serv.hmapCrea(string, fileByte), conAnn);
+		}
 		/* AU LIEU D ENVOYER DES STRINGS? ENVOYER DIRECTEMENT UNE HMAP AVEC NOM FICHIER ET BLOCS*/
 		
 		

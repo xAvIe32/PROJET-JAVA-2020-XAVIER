@@ -1,6 +1,10 @@
 package Serveur;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.*;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import Default.Commun;
@@ -89,4 +93,38 @@ public class SRV extends Commun {
 			e.printStackTrace();
 		}
 	}		
+	
+	
+	//Découpage du fchier en blocs de 4ko
+	public byte[] decoupFichier(File f){
+		FileInputStream fis = null;
+		//Déclaration du tableau d'octets
+		byte[] fileByte = new byte[(int) f.length()];
+		
+		try {
+			fis = new FileInputStream(f);
+			fileByte = fis.readNBytes(4000);
+			fis.close();
+		} catch (FileNotFoundException e) {
+			//Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			//Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return fileByte;
+	}
+	
+	public HashMap<String, int[]> hmapCrea(String filname, byte[] file) {
+		int[] nbBlocs = new int[file.length];
+		
+		HashMap<String, int[]> mapNomBloc = new HashMap<String, int[]>();
+		for (int i=0; i<file.length; i++) {
+			nbBlocs[i] = i+1;
+		}
+		mapNomBloc.put(filname, nbBlocs);
+		return mapNomBloc;
+		
+	}
 }

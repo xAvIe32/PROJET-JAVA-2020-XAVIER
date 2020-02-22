@@ -145,6 +145,38 @@ public abstract class Commun {
 	}
 	
 	
+	//Envoie d'objet
+	public void sendObject(Object obj, Socket sock) {
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(sock.getOutputStream());
+			oos.writeObject(obj);
+		} catch (IOException e) {
+			//Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public String[] nameFiles(String list) {
+		String[] tabloList = list.split(" ");
+		return tabloList;
+		
+	}
+	
+	public Object recObject(Socket sock) {
+		Object rec = new Object();
+		try {
+			ObjectInputStream ois = new ObjectInputStream(sock.getInputStream());
+			rec = ois.readObject();
+		} catch (IOException e) {
+			//Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			//Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rec;
+	}
+	
 	//Retour du Chemin
 	public String getPath() {
 		return path;

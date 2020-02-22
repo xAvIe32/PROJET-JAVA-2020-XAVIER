@@ -21,6 +21,7 @@ public class mainAnnuaire {
 			 Tc.start();
 		} while (annu.getService().isBound());
 		
+		//System.out.println(annu.getTheMap());
 	
 		
 		
