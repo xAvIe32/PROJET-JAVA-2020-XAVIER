@@ -8,11 +8,6 @@ public class mainAnnuaire {
 		
 		annu.creaServSock();
 		
-//		while(true) {
-//			annu.acceptDem();
-//			Tc.start();
-//			
-//		}
 		
 		do {
 			 Consommateur c = new Consommateur(annu);
@@ -21,7 +16,6 @@ public class mainAnnuaire {
 			 Tc.start();
 		} while (annu.getService().isBound());
 		
-		//System.out.println(annu.getTheMap());
 	
 		
 		

@@ -21,6 +21,7 @@ public class Consommateur implements Runnable{
 		int nbFilesServ = an.countFiles(list);
 		
 		for (int i=0; i<nbFilesServ; i++) {
+			@SuppressWarnings("unchecked")
 			HashMap<String, int[]> fileBloc = (HashMap<String, int[]>) an.recObject(sserv);
 			an.fillMap(portString, fileBloc);
 			System.out.println(fileBloc);

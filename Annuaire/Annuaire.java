@@ -1,7 +1,5 @@
 package Annuaire;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -45,22 +43,7 @@ public class Annuaire{
 		}
 	}
 	
-	//Réception d'une chaine de caractères
-	public String receptionString(Socket sock) {
-		
-		String ligne = new String();
-		try {
-			//Création d'un Buffer 
-			BufferedReader reader = new BufferedReader (new InputStreamReader(sock.getInputStream()));
-			//Lecture du buffer
-			ligne = reader.readLine();
-		} catch (IOException e) {
-			//Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return ligne;
-	}
+
 	
 	public Object recObject(Socket sock) {
 		Object rec = new Object();

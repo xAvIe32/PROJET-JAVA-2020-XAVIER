@@ -37,38 +37,10 @@ public abstract class Commun {
 	}
 	
 	
-	//Envoie d'une chaine de caractères
-	public void envoieString(String toSend, Socket sock) {
-		OutputStream os;
-		try {
-			//Création d'un output stream
-			os = sock.getOutputStream();
-			PrintStream pn = new PrintStream(os);
-			//Envoie de la chaine
-			pn.println(toSend);
-		} catch (IOException e) {
-			//   Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 	
 
-	//Réception d'une chaine de caractères
-	public String receptionString(Socket sock) {
-		
-		String ligne = new String();
-		try {
-			//Création d'un Buffer 
-			BufferedReader reader = new BufferedReader (new InputStreamReader(sock.getInputStream()));
-			//Lecture du buffer
-			ligne = reader.readLine();
-		} catch (IOException e) {
-			//   Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return ligne;
-	}
+
 	
 	
 	//Conversion d'un fichier en String

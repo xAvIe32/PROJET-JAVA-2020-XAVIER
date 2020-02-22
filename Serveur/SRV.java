@@ -36,6 +36,7 @@ public class SRV extends Commun {
 	
 	//Saisie du port du serveur
 	public void saisiePort() {
+		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		boolean chiffre = false;
 		int noport = 0;
