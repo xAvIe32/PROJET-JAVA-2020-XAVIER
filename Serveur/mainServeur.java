@@ -7,8 +7,8 @@ public class mainServeur {
 	public static void main(String[] args) throws IOException {
 		//   Auto-generated method stub
 		//Création d'un serveur
-		SRV Serv = new SRV("C:\\Users\\Xavier\\Desktop\\");
-		Serv.saisiePort();
+		SRV Serv = new SRV("D:\\Bureau\\");
+		Serv.saisiePort(); 
 		
 		//CREATION DU SOCKET QUI ENVOIE A L'ANNUAIRE
 		Socket conAnn = new Socket("127.0.0.1", 32370);

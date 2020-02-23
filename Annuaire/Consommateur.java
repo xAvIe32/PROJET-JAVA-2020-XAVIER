@@ -18,16 +18,29 @@ public class Consommateur implements Runnable{
 		String list = (String) an.recObject(sserv);
 		System.out.println("serv " + port + " : "+ list);
 		int nbFilesServ = an.countFiles(list);
-		int[] blocs = (int []) an.recObject(sserv);
+		
 		
 		File_Servs_blocs fsb = new File_Servs_blocs();
-				
+			
+		
+		
 		for (int i=0; i<nbFilesServ; i++) {
+			int[] blocs = (int []) an.recObject(sserv);
 			fsb.setNomF(an.listeTab(list)[i]);
 			fsb.setServs(portString);
+			
+			
+			System.out.println(an.listeTab(list)[i]);
+			
+			for (int k : blocs) {
+				System.out.print(k + " ");
+			}
+			
+			
 			for (int j=0; j<blocs.length; j++) {
 				fsb.setBlocs(blocs[j]);
 			}
+			
 			
 			an.addFileToList(fsb);
 			

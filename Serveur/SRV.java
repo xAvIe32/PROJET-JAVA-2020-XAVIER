@@ -104,7 +104,7 @@ public class SRV extends Commun {
 		
 		try {
 			fis = new FileInputStream(f);
-			fileByte = fis.readNBytes(4000);
+			fileByte = fis.readAllBytes();
 			fis.close();
 		} catch (FileNotFoundException e) {
 			//Auto-generated catch block

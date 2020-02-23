@@ -26,7 +26,7 @@ public class File_Servs_blocs {
 		return tabStrings;
 	}
 
-	public void setServs(String servs) {
+	public synchronized void setServs(String servs) {
 		for (String string : tabStrings) {
 			if(string != servs) {
 				this.tabStrings.add(servs);
@@ -38,7 +38,7 @@ public class File_Servs_blocs {
 		return blocs;
 	}
 
-	public void setBlocs(Integer bl) {
+	public synchronized void setBlocs(Integer bl) {
 		for (Integer integer : this.blocs) {
 			if (integer != bl) {
 				blocs.add(bl);

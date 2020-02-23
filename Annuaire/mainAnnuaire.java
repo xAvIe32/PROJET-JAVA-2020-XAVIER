@@ -1,7 +1,6 @@
 package Annuaire;
 
-import java.util.Iterator;
-import java.util.Set;
+
 
 public class mainAnnuaire {
 
@@ -29,19 +28,9 @@ public class mainAnnuaire {
 		for (int i=0; i<tabThread.length; i++) {
 			tabThread[i].join();
 		}
+		System.out.println("azeijrpazfjspdof");
+		annu.afficherList();
 		
-		for (int i=0; i<annu.getListOfFiles().length; i++) {
-			System.out.println("nomFichier " + annu.getListOfFiles()[i].getNomF());
-			System.out.println("Serveurs");
-			
-			for (int j=0; j<annu.getListOfFiles()[i].getServs().length; j++) {
-				System.out.println(annu.getListOfFiles()[i].getServs()[j]);
-				System.out.print("Blocs : ");
-				for (int k=0; k<annu.getListOfFiles()[i].getBlocs().length; k++) {
-					System.out.print(annu.getListOfFiles()[i].getBlocs()[k] + " ");
-				}
-			}
-		}
 		//System.out.println(annu.getTheMap());
 		
 //		Set<String> listKeys=annu.getTheMap().keySet();  // Obtenir la liste des clés

@@ -18,7 +18,7 @@ public class Annuaire{
 	
 
 	public Annuaire(int p) {
-		this.port = p;
+		this.port = p; 
 	}
 	
 	  //------\\
@@ -124,25 +124,50 @@ public class Annuaire{
 	public ArrayList<File_Servs_blocs>  getListOfFiles() {
 		return listOfFiles;
 	}
-
-	public void addFileToList(File_Servs_blocs fsb) {
+	
+	
+	public synchronized void addFileToList(File_Servs_blocs fsb) {
 			
+		ArrayList<String> Se = fsb.getServs();
+		ArrayList<Integer> Bl = fsb.getBlocs();
+		
 			for (File_Servs_blocs file_Servs_blocs : listOfFiles) {
-				if (file_Servs_blocs.nomF != fsb.nomF) {
+				if (file_Servs_blocs.nomF != fsb.nomF || file_Servs_blocs.nomF == null) {
 					listOfFiles.add(fsb);
 				}
 				
-				//A FINIRE2ARZFSQDCQZEF
-				//azefzaedfsqd
-				//azefsdqfqsdfaze
 				else {
-					for (ArrayList<String> : file_Servs_blocs.getServs()) {
-						
+					for (int j=0; j<Bl.size(); j++) {
+						if(file_Servs_blocs.getServs().get(j) != Se.get(j)){
+							file_Servs_blocs.setServs(Se.get(j));
+						}
+						else {
+							for (int i=0; i<Bl.size(); i++) {
+								if (file_Servs_blocs.getBlocs().get(i) != Bl.get(i)) {
+									file_Servs_blocs.setBlocs(Bl.get(i));
+								}
+								
+							}
+						}
 					}
 				}
+					
 			}
 	}
 	
-	
+	public void afficherList() {
+		for (File_Servs_blocs file_Servs_blocs : listOfFiles) {
+			System.out.println(file_Servs_blocs.nomF);
+			for (String string : file_Servs_blocs.getServs()) {
+				System.out.println(string);
+				for (Integer integer : file_Servs_blocs.getBlocs()) {
+					System.out.print(integer);
+					
+				}
+			}
+			
+			
+		}
+	}
 }
 	
