@@ -25,8 +25,14 @@ public class mainServeur {
 		String[] files = Serv.nameFiles(list);
 		for (String string : files) {
 			byte[] fileByte = Serv.decoupFichier(new File(Serv.getPath()+finPath+"\\"+string));
-			Serv.sendObject(Serv.hmapCrea(string, fileByte), conAnn);
+			int[] tabIndex = new int[fileByte.length];
+			for (int i=0; i<tabIndex.length; i++) {
+				tabIndex[i] = i+1;
+			}
+			Serv.sendObject(tabIndex, conAnn);
 		}
+		
+		conAnn.close();
 		/* AU LIEU D ENVOYER DES STRINGS? ENVOYER DIRECTEMENT UNE HMAP AVEC NOM FICHIER ET BLOCS*/
 		
 		
