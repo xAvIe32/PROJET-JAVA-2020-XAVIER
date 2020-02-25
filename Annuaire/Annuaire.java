@@ -4,6 +4,7 @@ import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 
@@ -13,8 +14,8 @@ public class Annuaire{
 	private Socket service;
 	//private HashMap<String, HashMap<String, int[]>> theMap = new HashMap<String, HashMap<String, int[]>>();
 	int ComptServ;
-	ArrayList<File_Servs_blocs> listOfFiles = new ArrayList<File_Servs_blocs>();
-	
+	HashMap<String, int[]> serv_bl = new HashMap< String, int[]>();
+	HashMap<String, HashMap<String, int[]>> filou = new HashMap<String, HashMap<String, int[]>>();
 	
 
 	public Annuaire(int p) {
@@ -121,53 +122,88 @@ public class Annuaire{
 		return ComptServ;
 	}
 	
-	public ArrayList<File_Servs_blocs>  getListOfFiles() {
-		return listOfFiles;
-	}
 	
 	
-	public synchronized void addFileToList(File_Servs_blocs fsb) {
-			
-		ArrayList<String> Se = fsb.getServs();
-		ArrayList<Integer> Bl = fsb.getBlocs();
+	
+	public void addEntry(String name, String s, int[] b) {
+		this.serv_bl.put(s, b);
 		
-			for (File_Servs_blocs file_Servs_blocs : listOfFiles) {
-				if (file_Servs_blocs.nomF != fsb.nomF || file_Servs_blocs.nomF == null) {
-					listOfFiles.add(fsb);
-				}
-				
-				else {
-					for (int j=0; j<Bl.size(); j++) {
-						if(file_Servs_blocs.getServs().get(j) != Se.get(j)){
-							file_Servs_blocs.setServs(Se.get(j));
-						}
-						else {
-							for (int i=0; i<Bl.size(); i++) {
-								if (file_Servs_blocs.getBlocs().get(i) != Bl.get(i)) {
-									file_Servs_blocs.setBlocs(Bl.get(i));
-								}
-								
-							}
-						}
-					}
-				}
-					
-			}
+		if (!filou.containsKey(name)) {
+			filou.put(name, serv_bl);
+		}
+		
+//		if (filou.putIfAbsent(name, serv_bl) == null) {
+//			System.out.println("Insertion de la ligne pour : " + name );
+//		}
+//		else if (filou.get(name).putIfAbsent(s, b) != null) {
+//			System.out.println("Insertion de la liojnlk,mplr : " + name );
+//		}
+//		else {
+//			System.out.println("Erreur d'insertion");
+//		}
+		
+		
+		
 	}
 	
-	public void afficherList() {
-		for (File_Servs_blocs file_Servs_blocs : listOfFiles) {
-			System.out.println(file_Servs_blocs.nomF);
-			for (String string : file_Servs_blocs.getServs()) {
-				System.out.println(string);
-				for (Integer integer : file_Servs_blocs.getBlocs()) {
-					System.out.print(integer);
-					
-				}
-			}
-			
-			
-		}
-	}
+	
+//	public ArrayList<File_Servs_blocs>  getListOfFiles() {
+//		return listOfFiles;
+//	}
+//	
+//	
+//	public synchronized void addFileToList(File_Servs_blocs fsb) {
+//			
+//		ArrayList<String> Se = fsb.getServs();
+//		ArrayList<Integer> Bl = fsb.getBlocs();
+//		
+//			for (File_Servs_blocs file_Servs_blocs : listOfFiles) {
+//				if (file_Servs_blocs.nomF != fsb.nomF || file_Servs_blocs.nomF == null) {
+//					listOfFiles.add(fsb);
+//				}
+//				
+//				else {
+//					for (int j=0; j<Bl.size(); j++) {
+//						if(file_Servs_blocs.getServs().get(j) != Se.get(j)){
+//							file_Servs_blocs.setServs(Se.get(j));
+//						}
+//						else {
+//							for (int i=0; i<Bl.size(); i++) {
+//								if (file_Servs_blocs.getBlocs().get(i) != Bl.get(i)) {
+//									file_Servs_blocs.setBlocs(Bl.get(i));
+//								}
+//								
+//							}
+//						}
+//					}
+//				}
+//					
+//			}
+//	}
+//	
+//	
+//	public synchronized void test(File_Servs_blocs fsb) {
+//		ArrayList<String> Se = fsb.getServs();
+//		ArrayList<Integer> Bl = fsb.getBlocs();
+//	
+//		if (!this.listOfFiles.contains(fsb)) {
+//			if (!this.listOfFiles.)
+//			
+//		}
+//	}
+//	public void afficherList() {
+//		for (File_Servs_blocs file_Servs_blocs : listOfFiles) {
+//			System.out.println(file_Servs_blocs.nomF);
+//			for (String string : file_Servs_blocs.getServs()) {
+//				System.out.println(string);
+//				for (Integer integer : file_Servs_blocs.getBlocs()) {
+//					System.out.println(integer);
+//					
+//				}
+//			}
+//			
+//			
+//		}
+//	}
 }
 	

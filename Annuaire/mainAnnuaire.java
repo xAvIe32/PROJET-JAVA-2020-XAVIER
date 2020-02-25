@@ -1,9 +1,13 @@
 package Annuaire;
 
-
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class mainAnnuaire {
 
+	@SuppressWarnings("rawtypes")
 	public static void main(String [] args) throws InterruptedException {
 		Annuaire annu = new Annuaire(32370);
 		System.out.println("nb Serv : ");
@@ -28,8 +32,41 @@ public class mainAnnuaire {
 		for (int i=0; i<tabThread.length; i++) {
 			tabThread[i].join();
 		}
+		
+		System.out.println(annu.filou);
+		
+		
+		
+		
+		
 		System.out.println("azeijrpazfjspdof");
-		annu.afficherList();
+		
+		 Set set = annu.filou.entrySet();
+	     Iterator iterator = set.iterator();
+	     
+	     while(iterator.hasNext()) {
+	        Map.Entry mentry = (Map.Entry)iterator.next();
+	        System.out.println("Fichier : "+ mentry.getKey());
+	        
+	        Set set2 = annu.filou.get(mentry.getKey()).entrySet();
+	        Iterator iterator2 = set2.iterator();
+	        while(iterator2.hasNext()) {
+	        	Map.Entry mentry2 = (Map.Entry)iterator2.next();
+	        	System.out.print("Serveur : "+ mentry2.getKey() + " & Blocs : ");
+	        	int[] blbl = annu.filou.get(mentry.getKey()).get(mentry2.getKey());
+
+	        	int nbBl = 0;
+	        	int frst = blbl[0];
+	        	for(int i=0; i<blbl.length; i++) {
+	        		nbBl++;
+	        	}
+	        	System.out.println("[" + frst + " => " + nbBl +"]");
+	        }
+	        
+	        
+	     }
+		
+
 		
 		//System.out.println(annu.getTheMap());
 		
