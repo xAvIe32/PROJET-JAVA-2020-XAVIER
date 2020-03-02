@@ -14,7 +14,6 @@ public class Annuaire{
 	private Socket service;
 	//private HashMap<String, HashMap<String, int[]>> theMap = new HashMap<String, HashMap<String, int[]>>();
 	int ComptServ;
-	HashMap<String, int[]> serv_bl = new HashMap< String, int[]>();
 	HashMap<String, HashMap<String, int[]>> filou = new HashMap<String, HashMap<String, int[]>>();
 	
 
@@ -126,11 +125,13 @@ public class Annuaire{
 	
 	
 	public void addEntry(String name, String s, int[] b) {
-		this.serv_bl.put(s, b);
+		
 		
 		if (!filou.containsKey(name)) {
-			filou.put(name, serv_bl);
+			//créer l'entrée avec name qui contiendra new hashmap()
+			//dans la nouvelle, put du serveur puis get(s) et put b
 		}
+		//cas ou il y a nane puis pas name puis si b ou pas b,...
 		
 //		if (filou.putIfAbsent(name, serv_bl) == null) {
 //			System.out.println("Insertion de la ligne pour : " + name );
