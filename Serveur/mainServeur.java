@@ -7,7 +7,7 @@ public class mainServeur {
 	public static void main(String[] args) throws IOException {
 		//   Auto-generated method stub
 		//Création d'un serveur
-		SRV Serv = new SRV("C:\\Users\\Xavier\\Desktop\\");
+		SRV Serv = new SRV("D:\\Bureau\\");
 		Serv.saisiePort(); 
 		
 		//CREATION DU SOCKET QUI ENVOIE A L'ANNUAIRE
@@ -15,22 +15,26 @@ public class mainServeur {
 		
 		//FONCTION QUI ENVOIE LE NUMERO DU PORT A L'ANNUAIRE
 		String portstring= ""+Serv.getPort();
-		
 		Serv.sendObject(portstring, conAnn);
 		
+		//Saisie du répertoire qui contient les fichiers du serveur
 		String finPath = Serv.saisieClavier();
+		//Envoie de la liste
 		String list = Serv.ListFiles(Serv.getPath()+ finPath);
 		Serv.sendObject(list, conAnn);
 		
+		//Découpage des fichiers en blocs d'octets
 		String[] files = Serv.nameFiles(list);
 		for (String string : files) {
 			byte[] fileByte = Serv.decoupFichier(new File(Serv.getPath()+finPath+"\\"+string));
 			int[] tabIndex = new int[fileByte.length];
 			
+			//Récupération des index
 			for (int i=0; i < fileByte.length; i++) {
 				tabIndex[i] = i+1;
 			}
 			
+			//Envoi des index des blocs
 			Serv.sendObject(tabIndex, conAnn);
 		}
 		
