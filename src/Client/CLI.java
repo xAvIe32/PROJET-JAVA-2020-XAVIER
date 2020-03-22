@@ -1,4 +1,5 @@
 package Client;
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -12,6 +13,7 @@ public class CLI extends Commun {
 	private String IPAddr;
 	private Socket sock;
 	private ArrayList<Obj_fil> lisObj;
+	private ArrayList<Byte> recon;
 	
 	//Constructeur
 	public CLI(String path, String iPAddr, ArrayList<Obj_fil> lo) {
@@ -49,6 +51,39 @@ public class CLI extends Commun {
 		
 	}
 	
+	
+	public synchronized void reconstitution(String fname, int min, int max, byte[] res) {
+//		if (max > recon.size()) {
+//			recon.
+//		}
+		int k=0;
+		for (int j = min-1; j<max; j++) {
+			
+			this.recon.set(j, res[k]);
+			
+			k++;
+		}
+	}
+	
+	
+	
+	
+	
+	
+	public void initArray(int a) {
+		this.recon = new ArrayList<Byte>(a);
+		for (int i = 0; i<a; i++) {
+			this.recon.add(null);
+		}
+	}
+	
+	
+	
+	public ArrayList<Byte> getRecon(){
+		return recon;
+	}
+	
+		
 	public int getnbBlocks(String filename) {
 		int a = this.lisObj.indexOf(filename);
 		int nbblocks = lisObj.get(a).getTabIndex().length;

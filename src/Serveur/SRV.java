@@ -1,8 +1,12 @@
 package Serveur;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.*;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -44,11 +48,7 @@ public class SRV extends Commun {
 	public void setFile(String f) {
 		this.file = f;
 	}
-	
-	
-	
-	
-	
+
 	//Saisie du port du serveur
 	public void saisiePort() {
 		@SuppressWarnings("resource")
@@ -115,6 +115,16 @@ public class SRV extends Commun {
 		}
 	}		
 	
+	
+	public void fermerServSock() {
+		try {
+			this.SocketServeur.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public String testInList(String l) {
 		
 		String name = new String();
@@ -134,25 +144,6 @@ public class SRV extends Commun {
 		
 		
 	}
-	//Découpage du fchier en blocs
-	public byte[] decoupFichier(File f){
-		FileInputStream fis = null;
-		//Déclaration du tableau d'octets
-		byte[] fileByte = new byte[(int) f.length()];
-		
-		try {
-			fis = new FileInputStream(f);
-			fileByte = fis.readAllBytes();
-			fis.close();
-		} catch (FileNotFoundException e) {
-			//Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			//Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return fileByte;
-	}
+	
 	
 }

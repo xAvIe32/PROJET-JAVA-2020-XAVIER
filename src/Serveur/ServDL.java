@@ -14,30 +14,22 @@ public class ServDL implements Runnable {
 	
 	
 	@Override
-	public void run() {
+	public void run(){
 		//Création d'un objet de type ServConso
 		ServConso sc = new ServConso(this.Serv);
 		//Création d'un tableau de Threads
 		ArrayList<Thread> tabT = new ArrayList<Thread>();
 		
-		//Navigation dans le tableau
-		for (int i = 0; i < tabT.size(); i++) {
+		
+		int i=0;
+		while (Serv.acceptDem()) {
 			//Si la connexion est acceptée on lance un thread
-			if (Serv.acceptDem()) {
-				tabT.add(new Thread(sc));
-				tabT.get(i).start();
-			}
-			
-			else {
-				//Sinon on sort du Thread
-				break;
-				
-				}
-				
+			tabT.add(new Thread(sc));
+			tabT.get(i).start();
+			i++;
 		}
 		
-		
-		System.out.println("Serv DL est sorti");
+//		System.out.println("Serv DL est sorti");
 	}
 	
 	

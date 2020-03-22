@@ -12,9 +12,8 @@ import Client.CLI;
 
 public class mainServeur {
 
-	private static int[] tabports;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({"rawtypes", "unchecked" })
 	public static void main(String[] args) throws IOException {
 		//   Auto-generated method stub
 		//Création d'un serveur
@@ -55,7 +54,7 @@ public class mainServeur {
 		System.out.println("Veuillez attendre ");
 		
 		
-		
+		conAnn.close();
 		
 		
 		Socket conDown = null;	
@@ -81,20 +80,13 @@ public class mainServeur {
 		System.out.println("----- Phase de téléchargement -----");
 		
 		
-		
-		
-		
-		
 		//Serv.saisiePort(); 
 		//String portstring2= ""+Serv.getPort();
 		
 		//Envoi du port
 		Serv.sendObject(portstring, conDown);
 			
-		
-		
-		
-		
+
 		
 		System.out.println("Fichiers disponibles au téléchargement : ");
 		
@@ -109,14 +101,20 @@ public class mainServeur {
 		
 		//Pour chaque fichier dispo
 		for (int j=0; j<count; j++) {
+			
+			System.out.println("--------------------------");
 			//Reception du nom de fichier
-			downable = (String) Serv.recObject(conDown);
+			downable =(String) Serv.recObject(conDown);
 
+			System.out.println(downable);
+			//System.out.println(Serv.recObject(conDown).getClass().descriptorString());
+			
 			
 			//Réception de la ligne de la Hashmap pour ce serveur et ce nom de fichier
 			HashMap<String, int[]> tabInd = (HashMap<String, int[]>) Serv.recObject(conDown);
+			System.out.println(tabInd);
 			
-			System.out.println(downable);
+			
 			
 			//Parcours de la Hashmap
 			Iterator it = tabInd.entrySet().iterator();
@@ -149,9 +147,11 @@ public class mainServeur {
 		conDown.close();
 		
 		
+		
+		
 		//Création d'un objet de type ServDL 
 		ServDL s = new ServDL(Serv);
-		
+	
 		//Création d'un nouveau socket serveur
 		Serv.creaServSock(Serv.getPort());
 		//Création d'un nousveau Thread
@@ -164,7 +164,6 @@ public class mainServeur {
 		CLI cl = new CLI(Serv.getPath() + finPath, "127.0.0.1", lisObj); 
 		//Nouvelle liste de ports
 		ArrayList<Integer> tabport = new ArrayList<Integer>(); 
-		System.out.println("je suis démarré");
 		String filedown = new String();
 		int taille = 0;
 		int nbServfile = 0;
@@ -177,7 +176,7 @@ public class mainServeur {
 			filedown = Serv.saisieClavier();
 			
 			boolean test = false;
-			
+			                  
 			String pp = new String();
 			
 			//Pour chaque objet dans la liste
@@ -208,31 +207,79 @@ public class mainServeur {
 		
 		}
 		
+		ArrayList<Thread> clithre = new ArrayList<Thread>();
+		cl.initArray(taille);
+		
 		//Récupération des index minimums et maximums
 		int sizeMin = 0;
 		int sizeMax = 0;
 		for (int i=0; i<tabport.size(); i++) {
-			sizeMin = (i) + sizeMax;
+			sizeMin = sizeMax +1;
 			sizeMax = (i+1)*(taille/nbServfile);
 			
 			if (sizeMax > taille) {
 				sizeMax = taille;
 			}
 			//Création d'un objet ConnectDL
-			ConnectDL codl = new ConnectDL(cl, tabport.get(i), filedown, sizeMin, sizeMax);
+			ConnectDL codl = new ConnectDL(cl, tabport.get(i), filedown, sizeMin, sizeMax, taille);
 			//Nouveau Thread
+			
 			Thread co = new Thread(codl);
+			clithre.add(co);
 			//Démarrage du Thread
-			co.start();
+			clithre.get(i).start();
+			try {
+				clithre.get(i).join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		
 		
+		for (int i=0; i<clithre.size(); i++) {
+			try {
+				clithre.get(i).join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		cl.getSock().close();
+		
+		
+
+		
+		//servo.interrupt();
+		
+		File f = new File(Serv.getPath() + "\\" + filedown);
+		ArrayList<Byte> alB = cl.getRecon();
+		System.out.println(alB.size());
+		
+		byte[] fb = new byte[alB.size()];
+		
+		
+		for(int i = 0; i<alB.size(); i++) {
+			
+			try {
+				fb[i] = alB.get(i).byteValue();
+			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//				System.out.println(i);
+			}
+			
+		}
 		
 		
 		
+		OutputStream os = new FileOutputStream(f);
+		os.write(fb);
 		
 		
+		os.close();
 		
 		
 		

@@ -1,5 +1,6 @@
 package Annuaire;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,10 +55,18 @@ private Annuaire an;
 				if (!list.contains((String) mentry.getKey())) {
 					
 					an.sendObject((String) mentry.getKey(), sserv);
-					an.sendObject((HashMap<String, int[]>) map.get(mentry.getKey()), sserv);
+					an.sendObject(map.get(mentry.getKey()), sserv);
+//					System.out.println("Le socket est fermé ? "+sserv.isClosed() + " " + port);
 					
 				}
-			}	
+			}
+		
+		try {
+			sserv.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

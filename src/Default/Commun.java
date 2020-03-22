@@ -105,7 +105,27 @@ public abstract class Commun {
 		return saisie;
 	}
 	
-	
+	//Découpage du fchier en blocs
+	public byte[] decoupFichier(File f){
+		FileInputStream fis = null;
+		//Déclaration du tableau d'octets
+		byte[] fileByte = new byte[(int) f.length()];
+		
+		try {
+			fis = new FileInputStream(f);
+			fileByte = fis.readAllBytes();
+			fis.close();
+		} catch (FileNotFoundException e) {
+			//Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			//Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return fileByte;
+	}
+		
 	//Affichage propre de la liste
 	public void AfficherListe(String list) {
 		//Séparation des noms de fichiers
