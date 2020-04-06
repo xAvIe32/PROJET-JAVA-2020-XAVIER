@@ -3,15 +3,33 @@ package Serveur;
 public class Obj_fil {
 	private String name;
 	private String port;
-	private int[] tabIndex;
+	private int tabIndex;
 	
-	public Obj_fil(String name, String port, int[] tabIndex) {
+	//Constructeur
+	public Obj_fil(String name, String port, int tabIndex) {
 		super();
 		this.name = name;
 		this.port = port;
 		this.tabIndex = tabIndex;
 	}
+	
+	
+	  //###########\\
+     //## SETTERS ##\\
+	//###############\\
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 
+	public void setPort(String port) {
+		this.port = port;
+	}
+	
+	  //###########\\
+     //## GETTERS ##\\
+	//###############\\	
+	
 	public String getName() {
 		return name;
 	}
@@ -20,21 +38,13 @@ public class Obj_fil {
 		return port;
 	}
 
-	public int[] getTabIndex() {
+	public int getTabIndex() {
 		return tabIndex;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
 
-	public void setPort(String port) {
-		this.port = port;
-	}
 
-	public void setTabIndex(int[] tabIndex) {
-		this.tabIndex = tabIndex;
-	}
+	
 	
 	
 

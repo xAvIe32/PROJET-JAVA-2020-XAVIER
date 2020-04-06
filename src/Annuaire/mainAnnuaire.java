@@ -10,10 +10,16 @@ public class mainAnnuaire {
 
 	@SuppressWarnings("rawtypes")
 	public static void main(String [] args) throws InterruptedException {
+		
+		//#############################################
+		//## CORRESPOND A LA PHASE 1 DU MAIN SERVEUR ##
+		//#############################################
+		
 		//Création de l'annuaire
 		Annuaire annu = new Annuaire();
 		//Saisie du nombre de serveurs
 		System.out.println("nb Serv : ");
+		//Saisie du nombre de serveurs
 		annu.setNbServ();
 		int nbServ = annu.getNbserv();
 		//Création du tableau de threads de la taille du nombre de serveurs
@@ -58,24 +64,25 @@ public class mainAnnuaire {
 		   while(iterator2.hasNext()) {
 			   Map.Entry mentry2 = (Map.Entry)iterator2.next();
 			   System.out.print("Serveur : "+ mentry2.getKey() + " & Blocs : ");
-			   int[] blbl = annu.getMap().get(mentry.getKey()).get(mentry2.getKey());
+			   int blbl = annu.getMap().get(mentry.getKey()).get(mentry2.getKey());
 			
-			   int nbBl = 0;
-			   int frst = blbl[0];
-			   for(int i=0; i<blbl.length; i++) {
-				   nbBl++;
-			   }
-			   System.out.println("[" + frst + " => " + nbBl +"]");
+			   
+			   System.out.println("[" + 1 + " => " + blbl +"]");
 		   }    
 		    
 		}
 		System.out.println("-------------------------------------------");
 		
-		
+		//Fermeture des sockets
 		annu.closeService();
 		annu.closeServSock();
 		
 		
+		//#############################################
+		//## CORRESPOND A LA PHASE 2 DU MAIN SERVEUR ##
+		//#############################################
+
+		//Ouverture d'un Deuxième socket serveur
 		annu.creaServSock(31300);
 		//Création du tableau de threads de la taille du nombre de serveurs
 		Thread[] tabThread2 = new Thread[nbServ];
@@ -103,8 +110,6 @@ public class mainAnnuaire {
 		for (int i=0; i<tabThread.length; i++) {
 			tabThread2[i].join();
 		}
-		
-		//annu.closeServSock();	
 	}
 	
 	

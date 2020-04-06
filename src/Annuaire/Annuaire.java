@@ -1,5 +1,4 @@
 package Annuaire;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -13,19 +12,19 @@ public class Annuaire{
 	private int port;
 	private ServerSocket socketAnn;
 	private Socket service;
-	private HashMap<String, HashMap<String, int[]>> filou = new HashMap<String, HashMap<String, int[]>>();
+	private HashMap<String, HashMap<String, Integer>> filou = new HashMap<String, HashMap<String, Integer>>();
 	private int nbServ;
 	
+	//Constructeur
 	public Annuaire() { 
 	}
 	
-	  //------\\
-	 //Méthodes\\
-	//----------\\
 	
+	  //############\\
+     //## METHODES ##\\
+	//################\\
 	
-	
-	
+
 	public String[] listeTab(String s) {
 		String[] tab = s.split(" ");
 		return tab;
@@ -64,10 +63,6 @@ public class Annuaire{
 		}
 	}
 	
-	//Retour du port
-	public int getPort() {
-		return this.port;
-	}
 	
 	//Accepter demande de connexion
 	public synchronized void acceptDem() {
@@ -80,13 +75,15 @@ public class Annuaire{
 
 		}
 	}
-	
+		
 	
 	//Fonction de réception des objets
 	public Object recObject(Socket sock) {
 		Object rec = new Object();
 		try {
+			//Réception depuis le socket
 			ObjectInputStream ois = new ObjectInputStream(sock.getInputStream());
+			//Ecriture des données dans l'objet
 			rec = ois.readObject();
 		} catch (IOException e) {
 			//Auto-generated catch block
@@ -98,10 +95,12 @@ public class Annuaire{
 		return rec;
 	}
 	
+	
 	//Envoie d'objet
 	public void sendObject(Object obj, Socket sock) {
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(sock.getOutputStream());
+			//Ecriture des données à envoyer via le socket
 			oos.writeObject(obj);
 		} catch (IOException e) {
 			//Auto-generated catch block
@@ -110,7 +109,6 @@ public class Annuaire{
 	}
 	
 
-	
 	//Fonction de saisie et de vérification des entiers
 	public int saisieInt() {
 		@SuppressWarnings("resource")
@@ -135,17 +133,7 @@ public class Annuaire{
 	    return valeur;
 	}
 
-	
-	
-	public void setNbServ() {
-		this.nbServ = this.saisieInt();
-	}
-	
-	
-	public int getNbserv() {
-		return this.nbServ;
-	}
-	
+
 	//Calcul du nombre de fichiers dans une liste
 	public int countFiles(String list) {
 		String[] tabloList = list.split(" ");
@@ -153,21 +141,12 @@ public class Annuaire{
 		return nbFiles;
 		
 	}
-		
-	//Renvoi du socket de service
-	public Socket getService() {
-		return service;
-	}
-
 	
-	public HashMap<String, HashMap<String, int[]>> getMap() {
-		return this.filou;
-	}
 	
 	//Ajout d'une entrée dans la Hashmap contenant pour chaque fichier les serveurs qui
 	//en ont des blocs ainsi que les blocs qu'ils possèdent
-	public void addEntry(String name, String s, int[] b) {
-		HashMap<String, int[]> servBl = new HashMap<String, int[]>();
+	public void addEntry(String name, String s, int b) {
+		HashMap<String, Integer> servBl = new HashMap<String, Integer>();
 		servBl.put(s, b);
 		//Si le nom du fichier n'existe pas dedans
 		if (filou.containsKey(name)) {
@@ -178,23 +157,51 @@ public class Annuaire{
 				if (filou.get(name).get(s) != b) {
 					//Ajout du nom de serveur et du tableau d'entiers
 					filou.get(name).put(s, b);
-				}
-				
+				}	
 			}
-			
 			else {
 				//Ajout du nom de serveur et du tableau d'entiers
 				filou.get(name).put(s, b);
-			}
-			
+			}	
 		}
 		else {
 			//ajout du nom du fichier et de la HashMap contenant le nom du serveur 
 			//et le tableau d'entiers
 			filou.put(name,  servBl);
 		}
-			
+	}		
 	
-	}			
+	
+	
+	  //###########\\
+     //## SETTERS ##\\
+	//###############\\
+	
+	public void setNbServ() {
+		this.nbServ = this.saisieInt();
+	}
+	
+	
+	  //###########\\
+     //## GETTERS ##\\
+	//###############\\	
+	
+	public HashMap<String, HashMap<String, Integer>> getMap() {
+		return this.filou;
+	}
+	
+	//Retour du port
+	public int getPort() {
+		return this.port;
+	}
+	
+	public int getNbserv() {
+		return this.nbServ;
+	}
+		
+	//Renvoi du socket de service
+	public Socket getService() {
+		return service;
+	}
 }
 	

@@ -6,96 +6,100 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import Client.CLI;
-
-
-
 public class mainServeur {
 
 
 	@SuppressWarnings({"rawtypes", "unchecked" })
 	public static void main(String[] args) throws IOException {
-		//   Auto-generated method stub
+		
+		
+		//########################################################################
+		//## DEBUT DE LA PHASE 1 (VOIR CLASSES MAIN ANNUAIRE PUIS CONSOMMATEUR) ##
+		//########################################################################
+		//La phase n°1 consiste à envoyer à l'annuaire la liste des fichiers avec leur
+		//taille et le port du serveur.
+		
 		//Création d'un serveur
 		SRV Serv = new SRV("D:\\Bureau\\");
 		Serv.saisiePort(); 
-		
 		//CREATION DU SOCKET QUI ENVOIE A L'ANNUAIRE
 		Socket conAnn = new Socket("127.0.0.1", 32370);
 		
 		//FONCTION QUI ENVOIE LE NUMERO DU PORT A L'ANNUAIRE
 		String portstring= ""+Serv.getPort();
-		Serv.sendObject(portstring, conAnn);
+		Serv.sendObject(portstring, conAnn, Serv.getOutputS());
 		
 		//Saisie du répertoire qui contient les fichiers du serveur
 		System.out.println("Veuillez saisir l'action à exécuter :");
 		String finPath = Serv.saisieClavier();
+		//Modification du chemin en ajoutant le dernier morceau
 		Serv.setpath(finPath);
+		//Création de la list d'objets que le serveur possède
+		Serv.setFichDet();
+		
+		
 		//Envoie de la liste
 		String list = Serv.ListFiles(Serv.getPath());
-		Serv.sendObject(list, conAnn);
+		Serv.sendObject(list, conAnn, Serv.getOutputS());
 		
-		//Découpage des fichiers en blocs d'octets
+		//Découpage de la liste par nom de fichier
 		String[] files = Serv.nameFiles(list);
+		
+		//Pour chaque fichier
 		for (String string : files) {
-			byte[] fileByte = Serv.decoupFichier(new File(Serv.getPath()+"\\"+string));
-			int[] tabIndex = new int[fileByte.length];
-			
-			//Récupération des index
-			for (int i=0; i < fileByte.length; i++) {
-				tabIndex[i] = i+1;
-			}
-			
-			//Envoi des index des blocs
-			Serv.sendObject(tabIndex, conAnn);
+			//Récupération de la taille
+			int fileByte = Serv.getFTaille(new File(string));
+			//Envoi de la taille du fichier à l'annuaire
+			Serv.sendObject(fileByte - 1, conAnn, Serv.getOutputS());
 		}
 
 	
 		System.out.println("Veuillez attendre ");
-		
-		
+		//Fermeture du socket
 		conAnn.close();
 		
 		
+		//##################################################
+		//## FIN DE LA PHASE 1 (VOIR CLASSE CONSOMMATEUR) ##
+		//##################################################
+		
+		
+		//Attente pour que tous les servuers aient fini de communiquer à l'annuaire
 		Socket conDown = null;	
 		//Tant que la connexion n'est pas en place
 		while (conDown == null) {
 			try {
-				//on se connecte puis on sort du for
-				conDown = new Socket("127.0.0.1", 31300);
-				
+				//on se connecte puis on sort du while
+				conDown = new Socket("127.0.0.1", 31300);	
 			} catch (UnknownHostException e) {
 				
 			} catch (IOException e) {
 				
 			}
-			
 		}
 		
 		
+		//##################################################################
+		//## DEBUT DE LA PHASE 2 (VOIR CLASSEs MAIN ANNUAIRE ET DOWNLOAD) ##
+		//##################################################################
+		//La phase n°2 consiste à recevoir depuis l'annuaire les fichiers
+		//que les autres serveurs/clients lui proposent.
 		
-		
-		//CREATION DU SOCKET QUI ENVOIE A L'ANNUAIRE
 		System.out.println("");
 		System.out.println("----- Phase de téléchargement -----");
-		
-		
-		//Serv.saisiePort(); 
-		//String portstring2= ""+Serv.getPort();
-		
-		//Envoi du port
-		Serv.sendObject(portstring, conDown);
-			
 
-		
+		//Envoi du port
+		Serv.sendObject(portstring, conDown, Serv.getOutputS());
 		System.out.println("Fichiers disponibles au téléchargement : ");
 		
 		//Envoie de la liste des fichiers
-		Serv.sendObject(list, conDown);
-		//Reception du nopmbre de fichiers concernés par ce serveur
-		int count = (int) Serv.recObject(conDown);
-		String downable = new String();
+		Serv.sendObject(list, conDown, Serv.getOutputS());
 		
+		//Reception du nopmbre de fichiers disponibles au téléchargement
+		int count = (int) Serv.recObject(conDown, Serv.getInputS());
+		
+		
+		String downable = new String();
 		ArrayList<Obj_fil> lisObj = new ArrayList<Obj_fil>();
 		System.out.println("count = " + count);
 		
@@ -104,65 +108,64 @@ public class mainServeur {
 			
 			System.out.println("--------------------------");
 			//Reception du nom de fichier
-			downable =(String) Serv.recObject(conDown);
-
+			downable =(String) Serv.recObject(conDown, Serv.getInputS());
 			System.out.println(downable);
-			//System.out.println(Serv.recObject(conDown).getClass().descriptorString());
-			
 			
 			//Réception de la ligne de la Hashmap pour ce serveur et ce nom de fichier
-			HashMap<String, int[]> tabInd = (HashMap<String, int[]>) Serv.recObject(conDown);
+			HashMap<String, Integer> tabInd = (HashMap<String, Integer>) Serv.recObject(conDown, Serv.getInputS());
 			System.out.println(tabInd);
-			
-			
 			
 			//Parcours de la Hashmap
 			Iterator it = tabInd.entrySet().iterator();
 			while (it.hasNext()) {
 				
 				Map.Entry mentry = (Map.Entry)it.next();
-				int[] blbl = tabInd.get(mentry.getKey());
-				int nbBl = 0;
-				int frst = blbl[0];
+				//Récupération de la taille du fichier
+				int blbl = tabInd.get(mentry.getKey());
 				
-				for(int i=0; i<blbl.length; i++) {
-				  	nbBl++;
-				}
-				
-				//Ajout dans la liste d'objets d'un objet de type Onbj_fil avec le nnom, le port et la  liste d'index
+				//Ajout dans la liste d'objets d'un objet de type Obj_fil avec le nom, le port et la taille
 				Obj_fil obj = new Obj_fil(downable,(String) mentry.getKey(), blbl);
 				lisObj.add(obj);
 				
 				//Affichage
 				System.out.print("Serveur : "+ obj.getPort() + " & Blocs : ");
-				System.out.println("[" + frst + " => " + nbBl +"]");
+				System.out.println("[" + 1 + " => " + blbl +"]");
 				
 			}
-			//System.out.println(tabInd);
-
-			
 		}
 		
 		//fermeture du socket
 		conDown.close();
 		
+		//##############################################
+		//## FIN DE LA PHASE 2 (VOIR CLASSE DOWNLOAD) ##
+		//##############################################
 		
 		
+		//#########################
+		//## DEBUT DE LA PHASE 3 ##
+		//#########################
+		//La phase 3 consiste à créer les Threads Serveurs et clients pour
+		//permettre d'envoyer et de recevoir des Parties de fichiers en même temps
 		
-		//Création d'un objet de type ServDL 
-		ServDL s = new ServDL(Serv);
-	
+		
 		//Création d'un nouveau socket serveur
 		Serv.creaServSock(Serv.getPort());
+		
+		//Ce thread permettra la création de plusieurs serveurs 
+		
+		//########################
+		//## VOIR CLASSE SERVDL ##
+		//########################
+		
+		ServDL s = new ServDL(Serv);
 		//Création d'un nousveau Thread
 		Thread servo = new Thread(s);
 		//Lancement d'un nouveau serveur
-		servo.start();
+		servo.start();	
 		
 		
-		//Création d'un nouveau client
-		CLI cl = new CLI(Serv.getPath() + finPath, "127.0.0.1", lisObj); 
-		//Nouvelle liste de ports
+		//Nouvelle liste de ports pour savoir su quels serveurs se connecter
 		ArrayList<Integer> tabport = new ArrayList<Integer>(); 
 		String filedown = new String();
 		int taille = 0;
@@ -175,14 +178,17 @@ public class mainServeur {
 			//Fonction de saisie
 			filedown = Serv.saisieClavier();
 			
-			boolean test = false;
-			                  
+			boolean test = false;      
 			String pp = new String();
+			
+			//Dans cette boucle on regarde chaque serveur qui possède le fichier que l'on veut
+			//télécharger et on ajoute dans la liste le port
 			
 			//Pour chaque objet dans la liste
 			for (int i=0; i<lisObj.size(); i++) {
-				//Si l'objet en cours de lecture a pour nom filedown
-				if (lisObj.get(i).getName().contentEquals(filedown)) {
+				
+				//Si l'objet en cours de lecture a pour nom celui qu'on a saisie et que ce n'est pas une partie de fichier
+				if ((lisObj.get(i).getName().contains(filedown)) && (!lisObj.get(i).getName().contains("£"))) {
 					//on récupère le port
 					pp = lisObj.get(i).getPort();
 					//conversion en int
@@ -190,179 +196,140 @@ public class mainServeur {
 					//Ajout du port dans la liste
 					tabport.add(portToCo); 
 					//Récupération de la taille du tableau d'index
-					taille = lisObj.get(i).getTabIndex().length;
+					taille = lisObj.get(i).getTabIndex();
 					//Pour sortir de la boucle
 					test = true;
 					nbServfile ++;
 				}
 				
 			}
-			
+			//On sort du for des qu'on a récupéré le port du serveur qui nous intéresse
 			if (test == true) {
 				break;
 			}
 			else {
+				//Si le nom saisi n'est pas dans la liste  de fichiers disponible, on refait la boucle
 				System.out.println("Erreur de saisie");
 			}
 		
 		}
 		
+		
 		ArrayList<Thread> clithre = new ArrayList<Thread>();
-		cl.initArray(taille);
 		
 		//Récupération des index minimums et maximums
 		int sizeMin = 0;
 		int sizeMax = 0;
+		
+		//Le but de cette boucle est de créer un nouveau client pour chaque serveur qui possède le fichier
+		
+		//Pour chaque port de la liste
 		for (int i=0; i<tabport.size(); i++) {
+			//définition du bloc minimal
 			sizeMin = sizeMax +1;
+			//Définition du bloc maximal
 			sizeMax = (i+1)*(taille/nbServfile);
 			
+			//si le bloc max est supérieur au dernier bloc alors 
+			//il prendra sa valeur
 			if (sizeMax > taille) {
 				sizeMax = taille;
 			}
-			//Création d'un objet ConnectDL
-			ConnectDL codl = new ConnectDL(cl, tabport.get(i), filedown, sizeMin, sizeMax, taille);
-			//Nouveau Thread
 			
-			Thread co = new Thread(codl);
-			clithre.add(co);
+			//Création d'un thread client
+			ConnectDL codl = new ConnectDL(Serv.getPath(), tabport.get(i), filedown, sizeMin, sizeMax, i);
+			clithre.add(codl);
 			//Démarrage du Thread
+			
+			//###########################
+			//## VOIR CLASSE CONNECTDL ##
+			//###########################
+			
 			clithre.get(i).start();
-			try {
-				clithre.get(i).join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		
 		
-		
+		//Attente de la fin de tous les threads clients
+		//Pour chaque Thread Client
 		for (int i=0; i<clithre.size(); i++) {
 			try {
-				clithre.get(i).join();
+				//Si il est vivant
+				if(clithre.get(i).isAlive()) {
+					//alors on attend la fin
+					clithre.get(i).join();
+				}
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
-		cl.getSock().close();
+		//#######################
+		//## FIN DE LA PHASE 3 ##
+		//#######################
 		
 		
-
-		
-		//servo.interrupt();
-		
-		File f = new File(Serv.getPath() + "\\" + filedown);
-		ArrayList<Byte> alB = cl.getRecon();
-		System.out.println(alB.size());
-		
-		byte[] fb = new byte[alB.size()];
 		
 		
-		for(int i = 0; i<alB.size(); i++) {
-			
-			try {
-				fb[i] = alB.get(i).byteValue();
-			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//				System.out.println(i);
+		//#########################
+		//## DEBUT DE LA PHASE 4 ##
+		//#########################
+		//La phase 4 a pour but de réassembler le fichier une fois que toutes les parties
+		//ont été reçues
+		
+		FileOutputStream fos;
+		//Création du fichier réseultant
+		File total = new File(Serv.getPath()+"\\"+filedown);
+		//Ouverture du flux d'écriture pour ce fichier en mode append
+		//pour écrire à chaque fois à la suite
+		fos = new FileOutputStream(total, true);
+		//Récupération de la liste des fichiers dans le répertoire
+		String[] tabFiles = Serv.ListFiles(Serv.getPath()).split(" ");
+		
+		int compt = 0;
+		//pour chaque fichier
+		for (int i = 0; i<tabFiles.length; i++) {
+			//Si c'est une partie (name£n°part)
+			if (tabFiles[i].contains(filedown+"£")) {
+				//Récupération du numéro de la partie
+				String[] sa = tabFiles[i].split("£");
+				int a = Integer.parseInt(sa[1]);
+				
+				//On vérifie que la partie soit bien celle qui doit suivre
+				if (a == compt) {
+					//Déclaration de la partie en tant que fichier
+					File fb = new File(tabFiles[i]);
+					//si elle existe
+					if (fb.exists()) {
+						//ouverture du flux de lecture de la partie
+						FileInputStream fis = new FileInputStream(fb);
+						//Ecriture dans le fichier résultant 
+						fos.write(fis.readAllBytes());
+						//fermeture du flux de lecture
+						fis.close();
+						//Suppression du fichier de partie
+						fb.delete();
+						//n° de la partie suivante
+						compt++;
+						
+					}
+				}
+				
 			}
-			
 		}
 		
+		//fermeture du flux d'écriture du fichier résultant
+		fos.close();
 		
+		//test sur le fichier résultant
+		if (total.exists()) {
+			System.out.println("Reconstiution de " + filedown.toUpperCase() + " Réussie");
+		}
+		else {
+			System.out.println("Echec de la reconstitution");
+		}	
 		
-		OutputStream os = new FileOutputStream(f);
-		os.write(fb);
-		
-		
-		os.close();
-		
-		
-		
-		//conAnn.close();
-		/* AU LIEU D ENVOYER DES STRINGS? ENVOYER DIRECTEMENT UNE HMAP AVEC NOM FICHIER ET BLOCS*/
-		
-		
-		
-		
-//		//Création du socket serveur
-//		Serv.creaServSock();
-//		//Acceptation de la connexion
-//		Serv.acceptDem();
-//		//Récupération du socket de service
-//		Socket sserv = Serv.getService();
-//		String commande = new String();
-//		
-//		
-//		
-//		
-//		int i = 1;
-//		while(i == 1)
-//		{
-//				//Réception de la demande du client
-//				String ligne = Serv.receptionString(sserv);
-//				System.out.println(ligne);
-//				
-//				//On appelle la fonction de séparation pour avoir que la commande
-//				String[] result = ligne.split(" ");
-//				commande = result[0];
-//				System.out.println(commande);
-//				
-//				switch (commande) {
-//				
-//				//Cas de téléchargement
-//				case "DOWNLOAD" :
-//					String stringFile =  new String();
-//					//Nom du fichier
-//					String filename = result[1];
-//					System.out.println("j'ai choisi le téléchargement");
-//					//Création du fichier
-//					File myFile = new File(Serv.getPath()+ finPath + filename);
-//					
-//					//Envoi du fichier s'il existe
-//					if (myFile.exists()==true) {
-//						//Conversion en String
-//						stringFile = Serv.FileToString(myFile, filename);
-//						//Envoi
-//						Serv.envoieString("FILE£" + filename + "£" + stringFile, sserv);
-//					}
-//					else {
-//						//Fermeture de la connexion si le fichier n'existe pas
-//						Serv.envoieString("CLOSE£Le fichier n'existe pas", sserv);
-//						i = 3000000;
-//					}
-//					
-//					break;
-//
-//				//Cas de listage des fichiers
-//				case "LIST":
-//					
-//					System.out.println("J'ai choisi la liste");
-//					//Envoie de la liste
-//					Serv.envoieString(Serv.ListFiles(Serv.getPath()+ finPath), sserv);
-//					
-//					break;					
-//					
-//				//Cas de demande de fermeture par le client
-//				case "CLOSE":
-//					System.out.println("Fermeture de la connexion");
-//					//Envoie de la fermeture au client
-//					Serv.envoieString("CLOSE£Déconnexion demandée par le Client", sserv);
-//					i = 3000000;
-//					break;
-//
-//				//Cas ou aucune commande n'est reconnue
-//				default: 
-//					System.out.println("La commande n'est pas reconnue");
-//					//Envoie de l'erreur de commande
-//					Serv.envoieString("FALSEACT£Action non reconnue", sserv);
-//					break;
-//				}
-//		}
-//		Serv.fermer();
+		//#######################
+		//## FIN DE LA PHASE 4 ##
+		//#######################
 	}
 }

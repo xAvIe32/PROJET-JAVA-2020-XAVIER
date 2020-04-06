@@ -1,14 +1,8 @@
 package Serveur;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.net.*;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import Default.Commun;
@@ -18,37 +12,30 @@ public class SRV extends Commun {
 	private ServerSocket SocketServeur;
 	private Socket service;
 	private String file;
+	private ArrayList<Obj_fil> fichdet;
 	
 	//Constructeur
 	public SRV(String path) {
 		super(path);
+		fichdet = new ArrayList<Obj_fil>();
 	}
-
-	  //------\\
-	 //Méthodes\\
-    //----------\\
+	
+	
+	  //############\\
+     //## METHODES ##\\
+	//################\\
 	
 	//Création du socket serveur
-		public void creaServSock(int p) {
-			try {
-				this.SocketServeur = new ServerSocket(p);
-			} catch (IOException e) {
-				//Auto-generated catch block
-				e.printStackTrace();
-			}
+	public void creaServSock(int p) {
+		try {
+			this.SocketServeur = new ServerSocket(p);
+		} catch (IOException e) {
+			//Auto-generated catch block
+			e.printStackTrace();
 		}
-	
-
-	
-	
-	public String getfile() {
-		return file;
-	}
-	
-	public void setFile(String f) {
-		this.file = f;
 	}
 
+		
 	//Saisie du port du serveur
 	public void saisiePort() {
 		@SuppressWarnings("resource")
@@ -90,21 +77,6 @@ public class SRV extends Commun {
 	}
 	
 	
-	//Renvoi du socket de service
-	public Socket getService() {
-		return service;
-	}
-	
-	public void setPort(int p) {
-		this.port = p;
-	}
-	
-	//Renvoi du port du serveur
-	public int getPort() {
-		return this.port;
-	}
-	
-	
 	//Fermeture du socket de service
 	public void fermer() {
 		try {
@@ -116,6 +88,7 @@ public class SRV extends Commun {
 	}		
 	
 	
+	//Fermeture du socket serveur
 	public void fermerServSock() {
 		try {
 			this.SocketServeur.close();
@@ -125,25 +98,41 @@ public class SRV extends Commun {
 		}
 	}
 	
-	public String testInList(String l) {
+	
+	  //###########\\
+     //## SETTERS ##\\
+	//###############\\
+	
+	public void setFichDet() {
+		String liste = ListFiles(getPath());
+		String[] nomsF = liste.split(" ");
 		
-		String name = new String();
-		while (true) {
-			
-			name = this.saisieClavier();
-			if (!l.contains(name)) {
-				System.out.println("Ce fichier ne fait pas partie de la liste, veuillez recommencer la saisie");
-			}
-			else {
-				break;
-			}
+		for (String string : nomsF) {
+			this.fichdet.add(new Obj_fil(string, ""+this.port, (int) new File(string).length()));
 		}
-		
-		return name;
-		
-		
-		
 	}
 	
+
+	  //###########\\
+     //## GETTERS ##\\
+	//###############\\	
+
+	public ArrayList<Obj_fil> getFichDet(){
+		return fichdet;
+	}
 	
+	public String getfile() {
+		return file;
+	}
+	
+	//Renvoi du socket de service
+	public Socket getService() {
+		return service;
+	}
+	
+	//Renvoi du port du serveur
+	public int getPort() {
+		return this.port;
+	}
+		
 }

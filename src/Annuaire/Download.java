@@ -14,13 +14,16 @@ private Annuaire an;
 		this.an = a;
 	}
 	
-
+	
+	//#############################################
+	//## CORRESPOND A LA PHASE 2 DU MAIN SERVEUR ##
+	//#############################################
+	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void run() {
 		//Acceptation de la demande de connexion
 		an.acceptDem();
-		//Auto-generated method stub
 		Socket sserv = an.getService();
 		
 		//Reception du port
@@ -32,7 +35,7 @@ private Annuaire an;
 		String list = (String) an.recObject(sserv);
 		
 		//Récupération de la HashMap contenant les ports et les index de blocs
-		HashMap<String, HashMap<String, int[]>> map = an.getMap();
+		HashMap<String, HashMap<String, Integer>> map = an.getMap();
 		
 		//Parcours de la HASHMAP pour savoir combien de serveurs possedent le fichier
 		Iterator it = map.entrySet().iterator();
@@ -54,9 +57,10 @@ private Annuaire an;
 			Map.Entry mentry = (Map.Entry)it2.next();
 				if (!list.contains((String) mentry.getKey())) {
 					
+					//Envoie du nom du fichier...
 					an.sendObject((String) mentry.getKey(), sserv);
+					//..., du port et de la taille
 					an.sendObject(map.get(mentry.getKey()), sserv);
-//					System.out.println("Le socket est fermé ? "+sserv.isClosed() + " " + port);
 					
 				}
 			}
@@ -64,7 +68,6 @@ private Annuaire an;
 		try {
 			sserv.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
