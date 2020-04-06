@@ -2,6 +2,8 @@ package Annuaire;
 
 
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +26,23 @@ public class mainAnnuaire {
 		int nbServ = annu.getNbserv();
 		//Création du tableau de threads de la taille du nombre de serveurs
 		Thread[] tabThread = new Thread[nbServ];
+		
+		String addr = new String();
+		try {
+			
+			//Récupération de l'adresse IP
+			InetAddress IP = InetAddress.getLocalHost();
+			String IPStr = IP+"";
+			//Séparation du nom de la machine
+			String[] splIP = IPStr.split("/");
+			addr = splIP[1]; 
+			//Affichage de l'adresse IP
+			System.out.println("L'adresse IP DE L'ANNUAIRE EST : " + addr);
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
 		
 		//Création du socket serveur de l'annuaire
 		annu.creaServSock(32370);
@@ -63,10 +82,12 @@ public class mainAnnuaire {
 		   Iterator iterator2 = set2.iterator();
 		   while(iterator2.hasNext()) {
 			   Map.Entry mentry2 = (Map.Entry)iterator2.next();
-			   System.out.print("Serveur : "+ mentry2.getKey() + " & Blocs : ");
-			   int blbl = annu.getMap().get(mentry.getKey()).get(mentry2.getKey());
-			
+			   //Separation du port et de l'ip
+			   String portIP = (String) mentry2.getKey();
+			   String[] splIPort = portIP.split(" ");
+			   System.out.print("Serveur : "+ splIPort[0] + " & Blocs : ");
 			   
+			   int blbl = annu.getMap().get(mentry.getKey()).get(mentry2.getKey());	   
 			   System.out.println("[" + 1 + " => " + blbl +"]");
 		   }    
 		    

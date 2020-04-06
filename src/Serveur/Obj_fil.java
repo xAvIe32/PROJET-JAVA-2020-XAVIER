@@ -4,13 +4,15 @@ public class Obj_fil {
 	private String name;
 	private String port;
 	private int tabIndex;
+	private String ipAddr;
 	
 	//Constructeur
-	public Obj_fil(String name, String port, int tabIndex) {
+	public Obj_fil(String name, String port, int tabIndex, String IP) {
 		super();
 		this.name = name;
 		this.port = port;
 		this.tabIndex = tabIndex;
+		this.ipAddr = IP;
 	}
 	
 	
@@ -41,7 +43,10 @@ public class Obj_fil {
 	public int getTabIndex() {
 		return tabIndex;
 	}
-
+	
+	public String getIP() {
+		return this.ipAddr;
+	}
 
 
 	

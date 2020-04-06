@@ -21,7 +21,8 @@ public class Consommateur implements Runnable{
 		Socket sserv = an.getService();
 		//Réception du port sur lequel se connecte le serveur
 		String portString = (String) an.recObject(sserv);
-		System.out.println("Serveur connecté sur le port : " + portString);
+		String[] splIPort = portString.split(" ");
+		System.out.println("Serv " +  splIPort[1] + " co sur le port " + splIPort[1]);
 		//réception de la liste de fichiers (sous forme d'un String"
 		String list = (String) an.recObject(sserv);
 		//Comptage du nombre de fichiers
@@ -35,7 +36,7 @@ public class Consommateur implements Runnable{
 			
 		}
 		
-		System.out.println("Serveur " + portString + " a fini");
+		System.out.println("Serveur " + splIPort[1] + " a fini");
 
 		try {
 			

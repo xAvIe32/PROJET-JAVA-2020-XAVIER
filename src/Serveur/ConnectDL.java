@@ -17,9 +17,9 @@ public class ConnectDL extends Thread{
 	private int numC;
 	
 	//Constructeur
-	public ConnectDL(String pa, int p, String fname, int min, int max, int n) {
+	public ConnectDL(String pa, int p, String fname, int min, int max, int n, String ip) {
 		// Auto-generated constructor stub
-		this.cl = new CLI(pa, "127.0.0.1");
+		this.cl = new CLI(pa, ip);
 		this.port = p;
 		this.fname = fname;
 		this.min = min-1;

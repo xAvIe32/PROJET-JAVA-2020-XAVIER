@@ -103,23 +103,10 @@ public class SRV extends Commun {
      //## SETTERS ##\\
 	//###############\\
 	
-	public void setFichDet() {
-		String liste = ListFiles(getPath());
-		String[] nomsF = liste.split(" ");
-		
-		for (String string : nomsF) {
-			this.fichdet.add(new Obj_fil(string, ""+this.port, (int) new File(string).length()));
-		}
-	}
-	
 
 	  //###########\\
      //## GETTERS ##\\
 	//###############\\	
-
-	public ArrayList<Obj_fil> getFichDet(){
-		return fichdet;
-	}
 	
 	public String getfile() {
 		return file;

@@ -22,21 +22,36 @@ public class mainServeur {
 		//Création d'un serveur
 		SRV Serv = new SRV("D:\\Bureau\\");
 		Serv.saisiePort(); 
+		String ipAnn = new String();
+		
+		System.out.println("Veuillez saisir l'IP de l'annuaire :");
+		ipAnn = Serv.saisieClavier();
+		
+		while(true) {
+			//Test de la saisie pour voir si c'est une ip
+			if (ipAnn.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")){
+				System.out.println("Vous avez bien saisi une ip");
+				break;
+			}
+			else {
+				System.out.println("Ressaisissez");
+				ipAnn = Serv.saisieClavier();
+			}
+		}
+			
+		
 		//CREATION DU SOCKET QUI ENVOIE A L'ANNUAIRE
-		Socket conAnn = new Socket("127.0.0.1", 32370);
+		Socket conAnn = new Socket(ipAnn, 32370);
 		
 		//FONCTION QUI ENVOIE LE NUMERO DU PORT A L'ANNUAIRE
 		String portstring= ""+Serv.getPort();
-		Serv.sendObject(portstring, conAnn, Serv.getOutputS());
+		Serv.sendObject(portstring + " " + ipAnn, conAnn, Serv.getOutputS());
 		
 		//Saisie du répertoire qui contient les fichiers du serveur
 		System.out.println("Veuillez saisir l'action à exécuter :");
 		String finPath = Serv.saisieClavier();
 		//Modification du chemin en ajoutant le dernier morceau
 		Serv.setpath(finPath);
-		//Création de la list d'objets que le serveur possède
-		Serv.setFichDet();
-		
 		
 		//Envoie de la liste
 		String list = Serv.ListFiles(Serv.getPath());
@@ -69,8 +84,12 @@ public class mainServeur {
 		//Tant que la connexion n'est pas en place
 		while (conDown == null) {
 			try {
+				
+				InetAddress IP = InetAddress.getLocalHost();
+				
+				System.out.println(IP);
 				//on se connecte puis on sort du while
-				conDown = new Socket("127.0.0.1", 31300);	
+				conDown = new Socket(ipAnn, 31300);	
 			} catch (UnknownHostException e) {
 				
 			} catch (IOException e) {
@@ -123,8 +142,11 @@ public class mainServeur {
 				//Récupération de la taille du fichier
 				int blbl = tabInd.get(mentry.getKey());
 				
+				String IPort = (String) mentry.getKey();
+				String[] splIPort = IPort.split(" ");
+				
 				//Ajout dans la liste d'objets d'un objet de type Obj_fil avec le nom, le port et la taille
-				Obj_fil obj = new Obj_fil(downable,(String) mentry.getKey(), blbl);
+				Obj_fil obj = new Obj_fil(downable, splIPort[0], blbl, splIPort[1]);
 				lisObj.add(obj);
 				
 				//Affichage
@@ -170,7 +192,7 @@ public class mainServeur {
 		String filedown = new String();
 		int taille = 0;
 		int nbServfile = 0;
-		
+		String ip = new String();
 		while(true) {
 			//FONCTION QUI ENVOIE LE NUMERO DU PORT A L'ANNUAIRE		
 			System.out.println("Entrez le nom du fichier à télécharger :");
@@ -180,7 +202,6 @@ public class mainServeur {
 			
 			boolean test = false;      
 			String pp = new String();
-			
 			//Dans cette boucle on regarde chaque serveur qui possède le fichier que l'on veut
 			//télécharger et on ajoute dans la liste le port
 			
@@ -197,6 +218,7 @@ public class mainServeur {
 					tabport.add(portToCo); 
 					//Récupération de la taille du tableau d'index
 					taille = lisObj.get(i).getTabIndex();
+					ip = lisObj.get(i).getIP();
 					//Pour sortir de la boucle
 					test = true;
 					nbServfile ++;
@@ -236,8 +258,9 @@ public class mainServeur {
 				sizeMax = taille;
 			}
 			
+			
 			//Création d'un thread client
-			ConnectDL codl = new ConnectDL(Serv.getPath(), tabport.get(i), filedown, sizeMin, sizeMax, i);
+			ConnectDL codl = new ConnectDL(Serv.getPath(), tabport.get(i), filedown, sizeMin, sizeMax, i, ip);
 			clithre.add(codl);
 			//Démarrage du Thread
 			
