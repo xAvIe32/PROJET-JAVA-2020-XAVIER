@@ -13,14 +13,14 @@ public class mainAnnuaire {
 	@SuppressWarnings("rawtypes")
 	public static void main(String [] args) throws InterruptedException {
 		
-		//#############################################
-		//## CORRESPOND A LA PHASE 1 DU MAIN SERVEUR ##
-		//#############################################
+		//#################################################
+		//## CORRESPOND A LA PHASE 1 DU MAIN UTILISATEUR ##
+		//#################################################
 		
 		//Création de l'annuaire
 		Annuaire annu = new Annuaire();
 		//Saisie du nombre de serveurs
-		System.out.println("nb Serv : ");
+		System.out.println("Nombre d'utilisateurs : ");
 		//Saisie du nombre de serveurs
 		annu.setNbServ();
 		int nbServ = annu.getNbserv();
@@ -37,7 +37,7 @@ public class mainAnnuaire {
 			String[] splIP = IPStr.split("/");
 			addr = splIP[1]; 
 			//Affichage de l'adresse IP
-			System.out.println("L'adresse IP DE L'ANNUAIRE EST : " + addr);
+			System.out.println("L'adresse IP de l'annuaire est : " + addr);
 			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -47,7 +47,7 @@ public class mainAnnuaire {
 		//Création du socket serveur de l'annuaire
 		annu.creaServSock(32370);
 		//Création d'un nouveau consommateur
-		Consommateur c = new Consommateur(annu);
+		EnvoiFichierAnnuaire c = new EnvoiFichierAnnuaire(annu);
 				
 		
 		//Pour chaque serveur 
@@ -99,9 +99,9 @@ public class mainAnnuaire {
 		annu.closeServSock();
 		
 		
-		//#############################################
-		//## CORRESPOND A LA PHASE 2 DU MAIN SERVEUR ##
-		//#############################################
+		//#################################################
+		//## CORRESPOND A LA PHASE 2 DU MAIN UTILISATEUR ##
+		//#################################################
 
 		//Ouverture d'un Deuxième socket serveur
 		annu.creaServSock(31300);
@@ -109,14 +109,7 @@ public class mainAnnuaire {
 		Thread[] tabThread2 = new Thread[nbServ];
 
 		//Création d'un nouveau consommateur
-		Download d = new Download(annu);
-		
-		System.out.println("");
-		System.out.println("--------------------------");
-		System.out.println("----- Téléchargement -----");
-		System.out.println("--------------------------");
-		
-		System.out.println("j'attends " + nbServ + " Clients");
+		RecupListFichiers d = new RecupListFichiers(annu);
 		
 		
 		//Pour chaque serveur 

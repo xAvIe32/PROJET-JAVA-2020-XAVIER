@@ -65,7 +65,7 @@ public class Annuaire{
 	
 	
 	//Accepter demande de connexion
-	public synchronized void acceptDem() {
+	public boolean acceptDem() {
 		try {
 			//Création du socket de service
 			this.service = this.socketAnn.accept();
@@ -74,6 +74,7 @@ public class Annuaire{
 			e.printStackTrace();
 
 		}
+		return this.service.isConnected();
 	}
 		
 	

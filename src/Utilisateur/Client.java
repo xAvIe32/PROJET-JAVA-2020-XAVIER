@@ -1,13 +1,12 @@
-package Serveur;
+package Utilisateur;
 
 import java.io.DataInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import Client.CLI;
 
-public class ConnectDL extends Thread{
+public class Client extends Thread{
 	//Variables
 	private CLI cl;
 	private int port;
@@ -15,22 +14,24 @@ public class ConnectDL extends Thread{
 	private int max;
 	private String fname;
 	private int numC;
+	private String path;
 	
 	//Constructeur
-	public ConnectDL(String pa, int p, String fname, int min, int max, int n, String ip) {
+	public Client(String pa, int p, String fname, int min, int max, int n, String ip) {
 		// Auto-generated constructor stub
-		this.cl = new CLI(pa, ip);
+		this.cl = new CLI(ip);
 		this.port = p;
 		this.fname = fname;
 		this.min = min-1;
 		this.max = max;
 		this.numC = n;
+		this.path = pa;
 	}
 	
 	
-	//#############################################
-	//## CORRESPOND A LA PHASE 3 DU MAIN SERVEUR ##
-	//#############################################
+	//#################################################
+	//## CORRESPOND A LA PHASE 3 DU MAIN UTILISATEUR ##
+	//#################################################
 	
 	//###################
 	//## PARTIE CLIENT ##
@@ -45,11 +46,14 @@ public class ConnectDL extends Thread{
 		cl.connect(this.port);
 		System.out.println("je suis co sur le serv : " + this.port);
 		
+		cl.setpath(this.path);
+		
 		//Envoi du nom du fichier et des bornes de l'index
 		cl.sendObject(this.fname + " " + this.min + " " + this.max + " " + this.numC, cl.getSock(), cl.getOutputS());
 		
 		//Réception de la partie
 		try {
+			
 			//Ouverture d'un flux de données de lecture
 			DataInputStream dis = new DataInputStream(cl.getSock().getInputStream());
 			//Ouverture d'un flux d'écriture dans un fichier

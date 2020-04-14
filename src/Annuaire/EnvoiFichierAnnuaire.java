@@ -3,17 +3,17 @@ package Annuaire;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Consommateur implements Runnable{
+public class EnvoiFichierAnnuaire implements Runnable{
 	private Annuaire an;
 	
 	//Constructeur
-	public Consommateur(Annuaire a) {
+	public EnvoiFichierAnnuaire(Annuaire a) {
 		this.an = a;
 	}
 
-	//#############################################
-	//## CORRESPOND A LA PHASE 1 DU MAIN SERVEUR ##
-	//#############################################
+	//#################################################
+	//## CORRESPOND A LA PHASE 1 DU MAIN UTILISATEUR ##
+	//#################################################
 	
 	@Override
 	public void run() {
@@ -22,7 +22,7 @@ public class Consommateur implements Runnable{
 		//Réception du port sur lequel se connecte le serveur
 		String portString = (String) an.recObject(sserv);
 		String[] splIPort = portString.split(" ");
-		System.out.println("Serv " +  splIPort[1] + " co sur le port " + splIPort[1]);
+		System.out.println("Serv " +  splIPort[0] + " connecté et son adresse est " + splIPort[1]);
 		//réception de la liste de fichiers (sous forme d'un String"
 		String list = (String) an.recObject(sserv);
 		//Comptage du nombre de fichiers
@@ -36,7 +36,7 @@ public class Consommateur implements Runnable{
 			
 		}
 		
-		System.out.println("Serveur " + splIPort[1] + " a fini");
+		System.out.println("Serveur " + splIPort[0] + " a fini");
 
 		try {
 			

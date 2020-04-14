@@ -1,4 +1,4 @@
-package Serveur;
+package Utilisateur;
 
 public class Obj_fil {
 	private String name;

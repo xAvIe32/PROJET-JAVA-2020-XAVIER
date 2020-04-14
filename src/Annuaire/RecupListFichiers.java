@@ -6,18 +6,18 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Download implements Runnable {
+public class RecupListFichiers implements Runnable {
 private Annuaire an;
 	
 	//Constructeur
-	public Download(Annuaire a) {
+	public RecupListFichiers(Annuaire a) {
 		this.an = a;
 	}
 	
 	
-	//#############################################
-	//## CORRESPOND A LA PHASE 2 DU MAIN SERVEUR ##
-	//#############################################
+	//#################################################
+	//## CORRESPOND A LA PHASE 2 DU MAIN UTILISATEUR ##
+	//#################################################
 	
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -25,10 +25,6 @@ private Annuaire an;
 		//Acceptation de la demande de connexion
 		an.acceptDem();
 		Socket sserv = an.getService();
-		
-		//Reception du port
-		String port = (String) an.recObject(sserv);
-		System.out.println("DOWN : Serv connecté sur " + port);
 		int count = 0;
 		
 		//Réception de la liste de fichiers
@@ -41,7 +37,11 @@ private Annuaire an;
 		Iterator it = map.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry mentry = (Map.Entry)it.next();
-				if (!list.contains((String) mentry.getKey())) {
+			
+				String strment = (String) mentry.getKey();
+				String[] tabMent =  strment.split("\\\\");
+				
+				if (!list.contains(tabMent[3])) {
 					
 					count++;
 				}

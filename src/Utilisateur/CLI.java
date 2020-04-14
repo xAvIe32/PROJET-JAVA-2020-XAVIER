@@ -1,4 +1,4 @@
-package Client;
+package Utilisateur;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -10,8 +10,7 @@ public class CLI extends Commun {
 	private Socket sock;
 	
 	//Constructeur
-	public CLI(String path, String iPAddr) {
-		super(path);
+	public CLI(String iPAddr) {
 		IPAddr = iPAddr;
 	} 
 	

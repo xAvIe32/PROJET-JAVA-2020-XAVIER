@@ -1,8 +1,6 @@
-package Serveur;
-import java.io.File;
+package Utilisateur;
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import Default.Commun;
@@ -11,14 +9,6 @@ public class SRV extends Commun {
 	//Attributs de l'objet serveur
 	private ServerSocket SocketServeur;
 	private Socket service;
-	private String file;
-	private ArrayList<Obj_fil> fichdet;
-	
-	//Constructeur
-	public SRV(String path) {
-		super(path);
-		fichdet = new ArrayList<Obj_fil>();
-	}
 	
 	
 	  //############\\
@@ -97,20 +87,11 @@ public class SRV extends Commun {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	  //###########\\
-     //## SETTERS ##\\
-	//###############\\
-	
+
 
 	  //###########\\
      //## GETTERS ##\\
 	//###############\\	
-	
-	public String getfile() {
-		return file;
-	}
 	
 	//Renvoi du socket de service
 	public Socket getService() {

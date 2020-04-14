@@ -11,13 +11,7 @@ public abstract class Commun {
 	protected int port;
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
-	
-	//Constructeur
-	public Commun(String path) {
-		super();
-		this.path = path;
-		
-	}
+
 	
 	  //############\\
      //## METHODES ##\\
@@ -109,6 +103,7 @@ public abstract class Commun {
 			
 		return rec;
 	}
+	
 
 	
 	
@@ -118,7 +113,7 @@ public abstract class Commun {
 	
 	//Modifie le chemin
 	public void setpath(String p) {
-		this.path = this.path + p;
+		this.path = p;
 	}
 		
 		
@@ -156,4 +151,5 @@ public abstract class Commun {
 	public ObjectOutputStream getOutputS() {
 		return this.oos;
 	}
+
 }
