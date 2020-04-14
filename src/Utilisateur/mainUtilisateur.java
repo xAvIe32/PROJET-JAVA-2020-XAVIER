@@ -202,13 +202,15 @@ public class mainUtilisateur {
 		s.start();	
 		
 		
-		//Nouvelle liste de ports pour savoir su quels serveurs se connecter
-		ArrayList<Integer> tabport = new ArrayList<Integer>(); 
-		String filedown = new String();
-		int taille = 0;
-		int nbServfile = 0;
-		String ip = new String();
+		
 		while (true) {
+			
+			//Nouvelle liste de ports pour savoir su quels serveurs se connecter
+			ArrayList<Integer> tabport = new ArrayList<Integer>(); 
+			String filedown = new String();
+			int taille = 0;
+			int nbServfile = 0;
+			String ip = new String();
 			
 			int Guilhem = 0;
 			
